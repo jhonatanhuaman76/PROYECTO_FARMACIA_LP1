@@ -27,6 +27,9 @@
         <li class="nav-item">
           <a class="nav-link" href="#">Reportes</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Configuracion</a>
+        </li>
       </ul>
     </div>
   </div>
