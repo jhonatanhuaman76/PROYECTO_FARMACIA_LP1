@@ -7,6 +7,6 @@
 <title>Pagina de Jhonatan</title>
 </head>
 <body>
-	Ocasionando conflictos
+	<p>Ocasionando conflictos</p>
 </body>
 </html>
