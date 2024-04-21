@@ -7,6 +7,6 @@
 <title>Pagina de Jhonatan</title>
 </head>
 <body>
-	Enviando desde main a desarrollo
+	Enviando con rama desarrollo
 </body>
 </html>
