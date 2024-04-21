@@ -7,6 +7,6 @@
 <title>Pagina de Jhonatan</title>
 </head>
 <body>
-	Borrando todo
+	Enviando desde main a desarrollo
 </body>
 </html>
