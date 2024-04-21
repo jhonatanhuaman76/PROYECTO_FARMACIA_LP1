@@ -7,7 +7,6 @@
 <title>Pagina de Jhonatan</title>
 </head>
 <body>
-	Corrigiendo el conflicto
-	Nuevas funcionalidades
+	Borrando todo
 </body>
 </html>
