@@ -7,7 +7,7 @@
 <title>Pagina de Jhonatan</title>
 </head>
 <body>
-	Añadiendo funciones
-    Probando el merge
+	Corrigiendo el conflicto
+	Nuevas funcionalidades
 </body>
 </html>
