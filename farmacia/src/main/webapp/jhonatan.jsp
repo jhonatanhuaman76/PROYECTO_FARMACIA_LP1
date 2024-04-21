@@ -8,6 +8,5 @@
 </head>
 <body>
 	<p>Subiendo cambios de eclipse a github</p>
-	<p>Ocasionando conflictos</p>
 </body>
 </html>
