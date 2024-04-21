@@ -7,6 +7,6 @@
 <title>Pagina de Jhonatan</title>
 </head>
 <body>
-	Ocasionando conflictos
+	<p>Subiendo cambios de eclipse a github</p>
 </body>
 </html>
