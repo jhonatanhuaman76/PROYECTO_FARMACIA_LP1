@@ -236,6 +236,9 @@
 			   </center>  
 
 
+
+<!-- LAS VALIDACIONES ESTAN MAL TENEMOS QUE CAMBIAR LOS ID DE LOS CAMPOS DE TEXTO  -->
+
 <script  type="text/javascript">
     $(document).ready(function() {
     $('#frmEmpleado').bootstrapValidator({
