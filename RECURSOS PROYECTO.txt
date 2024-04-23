@@ -24,3 +24,12 @@ https://youtu.be/f6MXeI0JFuY?si=6hn2857fWyaOp4z2
 
 [Ventas de productos con diferentes presentaciones y precios (unidad, docena, centena, etc)]
 https://youtu.be/GRGvRPIvPy4?si=2Vc0dqJaU5-ftCri
+
+[Control de Buscador con librería Select2 de jquery]
+https://youtu.be/AtaIwvJ0c_Q?si=DdbI-DpOGipOpmhN
+
+[Cómo utilizar buscador de la librería Fuzzy en Vue]
+https://youtu.be/cfz4KusczBI?si=vYLK-gEal8WSMkp7
+
+[Buscador en tiempo real con Javascript utilizando indexOf y Bootstrap 4.]
+https://youtu.be/NduleX-AC74?si=ICIU-_RqbN1jDdkX
