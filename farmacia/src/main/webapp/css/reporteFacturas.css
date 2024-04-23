@@ -1,0 +1,21 @@
+@charset "UTF-8";
+
+.container-fluid {
+    width: 80%;
+    margin: auto; /* Centra el contenedor horizontalmente */
+}
+.container-fluid div{
+	display:flex;
+	justify-content: center;
+	align-items: center;
+	height: 40px;
+}
+.navbar-brand{
+	font-size:25px;
+}
+.centrar_tabla{
+	margin: auto;
+	width: 80%;
+	margin-top: 20px;
+	border: solid 1px gray;
+}
