@@ -150,18 +150,7 @@
 		      </div>
 			  </div>
 			  </div>
-			  </div>
-		              
-              </div>
-
-            
-            
-           </div>
-	       </div>
-		   </div>
-		   </div>
-		   </div>
-			
+			  </div>   
 			
 			
 			<!-- Section: Design Block -->
