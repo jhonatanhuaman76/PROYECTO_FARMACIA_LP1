@@ -5,14 +5,15 @@ import java.sql.ResultSet;
 import java.sql.CallableStatement;
 import java.util.ArrayList;
 
-import com.farmacia.entidad.Categoria;
-import com.farmacia.interfaces.ICategoriaDAO;
+import com.farmacia.entidad.Cliente;
+import com.farmacia.interfaces.IClienteDAO;
 import com.farmacia.util.MySqlConexion;
 
-public class CategoriaDAO implements ICategoriaDAO {
+
+public class ClienteDAO implements IClienteDAO{
 
 	@Override
-	public int registrarCategoria(Categoria c) {
+	public int registrarCliente(Cliente c) {
 		//DECLARAR VARIABLE PARA EL RESULTADO
 		int r=-1;
 		
@@ -27,10 +28,12 @@ public class CategoriaDAO implements ICategoriaDAO {
 			cone=MySqlConexion.miConexion();
 			
 			//PASO 02 - PREPARAR CALLABLESTATEMENT
-			cstm=cone.prepareCall("{CALL SP_REGISTRAR_CATEGORIA(null, ?)}");
+			cstm=cone.prepareCall("{CALL SP_REGISTRAR_CLIENTE(null, ?, ?, ?)}");
 			
 			//PASO 03 - ENVIAR LOS DATOS A CSTM OBTENIDO DE LA MEMORIA RAM
-			cstm.setString(1, c.getNom_cate());
+			cstm.setString(1, c.getDni_cli());
+			cstm.setString(2, c.getNom_cli());
+			cstm.setString(3, c.getApe_cli());
 	
 			//COMPROBANDO LO Q TIENE CSTM
 			System.out.println("==>"+cstm);
@@ -55,7 +58,7 @@ public class CategoriaDAO implements ICategoriaDAO {
 	}
 
 	@Override
-	public int modificarCategoria(Categoria c) {
+	public int modificarCliente(Cliente c) {
 		//DECLARAR VARIABLE PARA EL RESULTADO
 		int r=-1;
 		
@@ -70,11 +73,13 @@ public class CategoriaDAO implements ICategoriaDAO {
 			cone=MySqlConexion.miConexion();
 			
 			//PASO 02 - PREPARAR CALLABLESTATEMENT
-			cstm=cone.prepareCall("{CALL SP_MODIFICAR_CATEGORIA(?, ?)}");
+			cstm=cone.prepareCall("{CALL SP_MODIFICAR_CLIENTE(?, ?, ?, ?)}");
 			
 			//PASO 03 - ENVIAR LOS DATOS A CSTM OBTENIDO DE LA MEMORIA RAM
-			cstm.setInt(1, c.getNum_cate());
-			cstm.setString(2, c.getNom_cate());
+			cstm.setInt(1, c.getCod_cli());
+			cstm.setString(2, c.getDni_cli());
+			cstm.setString(3, c.getNom_cli());
+			cstm.setString(4, c.getApe_cli());
 
 			//COMPROBANDO LO Q TIENE CSTM
 			System.out.println("==>"+cstm);
@@ -100,7 +105,7 @@ public class CategoriaDAO implements ICategoriaDAO {
 	}
 
 	@Override
-	public int eliminarCategoria(int num_cate) {
+	public int eliminarCliente(int cod_cli) {
 		//DECLARAR VARIABLE PARA EL RESULTADO
 		int r=-1;
 		
@@ -115,10 +120,10 @@ public class CategoriaDAO implements ICategoriaDAO {
 			cone=MySqlConexion.miConexion();
 			
 			//PASO 02 - PREPARAR CALLABLESTATEMENT
-			cstm=cone.prepareCall("{CALL SP_ELIMINAR_CATEGORIA(?)}");
+			cstm=cone.prepareCall("{CALL SP_ELIMINAR_CLIENTE(?)}");
 			
 			//PASO 03 - ENVIAR LOS DATOS A CSTM OBTENIDO DE LA MEMORIA RAM
-			cstm.setInt(1, num_cate);
+			cstm.setInt(1, cod_cli);
 			//COMPROBANDO LO Q TIENE CSTM
 			System.out.println("==>"+cstm);
 			
@@ -143,18 +148,20 @@ public class CategoriaDAO implements ICategoriaDAO {
 	}
 
 	@Override
-	public Categoria buscarCategoria(int num_cate) {
+	public Cliente buscarCliente(int cod_cli) {
 		Connection cone=null;
 		CallableStatement cstm=null;
 		ResultSet rs=null;
-		Categoria cate=new Categoria();
+		Cliente cli=new Cliente();
 		try {
 			cone=MySqlConexion.miConexion();
-			cstm=cone.prepareCall("{CALL SP_BUSCAR_CATEGORIA(?)}");
-			cstm.setInt(1, num_cate);
+			cstm=cone.prepareCall("{CALL SP_BUSCAR_CLIENTE(?)}");
+			cstm.setInt(1, cod_cli);
 			rs=cstm.executeQuery();
 			while(rs.next()) {
-				cate.setNom_cate(rs.getString(2));
+				cli.setDni_cli(rs.getString(2));
+				cli.setNom_cli(rs.getString(3));
+				cli.setApe_cli(rs.getString(4));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -169,32 +176,34 @@ public class CategoriaDAO implements ICategoriaDAO {
 			}
 		}
 		
-		return cate;
+		return cli;
 	}
 
 	@Override
-	public ArrayList<Categoria> listadoCategoria() {
+	public ArrayList<Cliente> listadoCliente() {
+		//CALL SP_LISTAR_CLIENTES()
 		Connection cone=null;
 		CallableStatement cstm=null;
 		ResultSet rs=null;
-		ArrayList<Categoria>listame=new ArrayList<Categoria>();
+		ArrayList<Cliente>listame=new ArrayList<Cliente>();
 		
 		try {
 			//Invocar conexion
 			cone=MySqlConexion.miConexion();
 			//Preparar el cstm
-			cstm=cone.prepareCall("{CALL SP_LISTAR_CATEGORIA()}");
+			cstm=cone.prepareCall("{CALL SP_LISTAR_CLIENTE()}");
 			//Enviar lo q tiene cstm a rs
 			rs=cstm.executeQuery();
 			//Haciendo el recorrido
 			while(rs.next()) {
 				//Declarar un objeto basado a cliente
-				Categoria cate=new Categoria();
-				cate.setNum_cate((rs.getInt(1)));
-				cate.setNom_cate(rs.getString(2));
-
+				Cliente cli=new Cliente();
+				cli.setCod_cli(rs.getInt(1));
+				cli.setDni_cli(rs.getString(2));
+				cli.setNom_cli(rs.getString(3));
+				cli.setApe_cli(rs.getString(4));
 				//Enviando cli a listame
-				listame.add(cate);
+				listame.add(cli);
 			}
 
 		} catch (Exception e) {

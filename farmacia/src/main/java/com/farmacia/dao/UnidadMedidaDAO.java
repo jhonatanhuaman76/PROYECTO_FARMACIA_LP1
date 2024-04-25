@@ -5,14 +5,14 @@ import java.sql.ResultSet;
 import java.sql.CallableStatement;
 import java.util.ArrayList;
 
-import com.farmacia.entidad.Categoria;
-import com.farmacia.interfaces.ICategoriaDAO;
+import com.farmacia.entidad.UnidadMedida;
+import com.farmacia.interfaces.IUnidadMedidaDAO;
 import com.farmacia.util.MySqlConexion;
 
-public class CategoriaDAO implements ICategoriaDAO {
+public class UnidadMedidaDAO implements IUnidadMedidaDAO{
 
 	@Override
-	public int registrarCategoria(Categoria c) {
+	public int registrarUnidadMedida(UnidadMedida c) {
 		//DECLARAR VARIABLE PARA EL RESULTADO
 		int r=-1;
 		
@@ -27,10 +27,11 @@ public class CategoriaDAO implements ICategoriaDAO {
 			cone=MySqlConexion.miConexion();
 			
 			//PASO 02 - PREPARAR CALLABLESTATEMENT
-			cstm=cone.prepareCall("{CALL SP_REGISTRAR_CATEGORIA(null, ?)}");
+			cstm=cone.prepareCall("{CALL SP_REGISTRAR_UM(null, ?, ?)}");
 			
 			//PASO 03 - ENVIAR LOS DATOS A CSTM OBTENIDO DE LA MEMORIA RAM
-			cstm.setString(1, c.getNom_cate());
+			cstm.setString(1, c.getAbtr_uni());
+			cstm.setString(2, c.getDes_uni());
 	
 			//COMPROBANDO LO Q TIENE CSTM
 			System.out.println("==>"+cstm);
@@ -55,7 +56,7 @@ public class CategoriaDAO implements ICategoriaDAO {
 	}
 
 	@Override
-	public int modificarCategoria(Categoria c) {
+	public int modificarUnidadMedida(UnidadMedida c) {
 		//DECLARAR VARIABLE PARA EL RESULTADO
 		int r=-1;
 		
@@ -70,11 +71,12 @@ public class CategoriaDAO implements ICategoriaDAO {
 			cone=MySqlConexion.miConexion();
 			
 			//PASO 02 - PREPARAR CALLABLESTATEMENT
-			cstm=cone.prepareCall("{CALL SP_MODIFICAR_CATEGORIA(?, ?)}");
+			cstm=cone.prepareCall("{CALL SP_MODIFICAR_UM(?, ?, ?)}");
 			
 			//PASO 03 - ENVIAR LOS DATOS A CSTM OBTENIDO DE LA MEMORIA RAM
-			cstm.setInt(1, c.getNum_cate());
-			cstm.setString(2, c.getNom_cate());
+			cstm.setInt(1, c.getCod_uni());
+			cstm.setString(2, c.getAbtr_uni());
+			cstm.setString(3, c.getDes_uni());
 
 			//COMPROBANDO LO Q TIENE CSTM
 			System.out.println("==>"+cstm);
@@ -100,7 +102,7 @@ public class CategoriaDAO implements ICategoriaDAO {
 	}
 
 	@Override
-	public int eliminarCategoria(int num_cate) {
+	public int eliminarUnidadMedida(int cod_uni) {
 		//DECLARAR VARIABLE PARA EL RESULTADO
 		int r=-1;
 		
@@ -115,10 +117,10 @@ public class CategoriaDAO implements ICategoriaDAO {
 			cone=MySqlConexion.miConexion();
 			
 			//PASO 02 - PREPARAR CALLABLESTATEMENT
-			cstm=cone.prepareCall("{CALL SP_ELIMINAR_CATEGORIA(?)}");
+			cstm=cone.prepareCall("{CALL SP_ELIMINAR_UM(?)}");
 			
 			//PASO 03 - ENVIAR LOS DATOS A CSTM OBTENIDO DE LA MEMORIA RAM
-			cstm.setInt(1, num_cate);
+			cstm.setInt(1, cod_uni);
 			//COMPROBANDO LO Q TIENE CSTM
 			System.out.println("==>"+cstm);
 			
@@ -143,18 +145,19 @@ public class CategoriaDAO implements ICategoriaDAO {
 	}
 
 	@Override
-	public Categoria buscarCategoria(int num_cate) {
+	public UnidadMedida buscarUnidadMedida(int cod_uni) {
 		Connection cone=null;
 		CallableStatement cstm=null;
 		ResultSet rs=null;
-		Categoria cate=new Categoria();
+		UnidadMedida um=new UnidadMedida();
 		try {
 			cone=MySqlConexion.miConexion();
-			cstm=cone.prepareCall("{CALL SP_BUSCAR_CATEGORIA(?)}");
-			cstm.setInt(1, num_cate);
+			cstm=cone.prepareCall("{CALL SP_BUSCAR_UM(?)}");
+			cstm.setInt(1, cod_uni);
 			rs=cstm.executeQuery();
 			while(rs.next()) {
-				cate.setNom_cate(rs.getString(2));
+				um.setAbtr_uni(rs.getString(2));
+				um.setDes_uni(rs.getString(3));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -169,32 +172,33 @@ public class CategoriaDAO implements ICategoriaDAO {
 			}
 		}
 		
-		return cate;
+		return um;
 	}
 
 	@Override
-	public ArrayList<Categoria> listadoCategoria() {
+	public ArrayList<UnidadMedida> listadoUnidadMedida() {
 		Connection cone=null;
 		CallableStatement cstm=null;
 		ResultSet rs=null;
-		ArrayList<Categoria>listame=new ArrayList<Categoria>();
+		ArrayList<UnidadMedida>listame=new ArrayList<UnidadMedida>();
 		
 		try {
 			//Invocar conexion
 			cone=MySqlConexion.miConexion();
 			//Preparar el cstm
-			cstm=cone.prepareCall("{CALL SP_LISTAR_CATEGORIA()}");
+			cstm=cone.prepareCall("{CALL SP_LISTAR_UM()}");
 			//Enviar lo q tiene cstm a rs
 			rs=cstm.executeQuery();
 			//Haciendo el recorrido
 			while(rs.next()) {
 				//Declarar un objeto basado a cliente
-				Categoria cate=new Categoria();
-				cate.setNum_cate((rs.getInt(1)));
-				cate.setNom_cate(rs.getString(2));
+				UnidadMedida um=new UnidadMedida();
+				um.setCod_uni(rs.getInt(1));
+				um.setAbtr_uni(rs.getString(2));
+				um.setDes_uni(rs.getString(3));
 
 				//Enviando cli a listame
-				listame.add(cate);
+				listame.add(um);
 			}
 
 		} catch (Exception e) {

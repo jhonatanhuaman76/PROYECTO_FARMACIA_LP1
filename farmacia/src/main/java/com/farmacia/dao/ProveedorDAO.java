@@ -5,14 +5,14 @@ import java.sql.ResultSet;
 import java.sql.CallableStatement;
 import java.util.ArrayList;
 
-import com.farmacia.entidad.Categoria;
-import com.farmacia.interfaces.ICategoriaDAO;
+import com.farmacia.entidad.Proveedor;
+import com.farmacia.interfaces.IProveedorDAO;
 import com.farmacia.util.MySqlConexion;
 
-public class CategoriaDAO implements ICategoriaDAO {
+public class ProveedorDAO implements IProveedorDAO{
 
 	@Override
-	public int registrarCategoria(Categoria c) {
+	public int registrarProveedor(Proveedor c) {
 		//DECLARAR VARIABLE PARA EL RESULTADO
 		int r=-1;
 		
@@ -27,10 +27,15 @@ public class CategoriaDAO implements ICategoriaDAO {
 			cone=MySqlConexion.miConexion();
 			
 			//PASO 02 - PREPARAR CALLABLESTATEMENT
-			cstm=cone.prepareCall("{CALL SP_REGISTRAR_CATEGORIA(null, ?)}");
+			cstm=cone.prepareCall("{CALL SP_REGISTRAR_PROVEEDOR(null, ?, ?, ?, ?, ?, ?)}");
 			
 			//PASO 03 - ENVIAR LOS DATOS A CSTM OBTENIDO DE LA MEMORIA RAM
-			cstm.setString(1, c.getNom_cate());
+			cstm.setString(1, c.getRuc_prov());
+			cstm.setString(2, c.getNom_prov());
+			cstm.setString(3, c.getTelf_prov());
+			cstm.setString(4, c.getDire_prov());
+			cstm.setString(5, c.getCorreo_prov());
+			cstm.setString(6, c.getWeb_prov());
 	
 			//COMPROBANDO LO Q TIENE CSTM
 			System.out.println("==>"+cstm);
@@ -55,7 +60,7 @@ public class CategoriaDAO implements ICategoriaDAO {
 	}
 
 	@Override
-	public int modificarCategoria(Categoria c) {
+	public int modificarProveedor(Proveedor c) {
 		//DECLARAR VARIABLE PARA EL RESULTADO
 		int r=-1;
 		
@@ -70,11 +75,16 @@ public class CategoriaDAO implements ICategoriaDAO {
 			cone=MySqlConexion.miConexion();
 			
 			//PASO 02 - PREPARAR CALLABLESTATEMENT
-			cstm=cone.prepareCall("{CALL SP_MODIFICAR_CATEGORIA(?, ?)}");
+			cstm=cone.prepareCall("{CALL SP_MODIFICAR_PROVEEDOR(?, ?, ?, ?, ?, ?, ?)}");
 			
 			//PASO 03 - ENVIAR LOS DATOS A CSTM OBTENIDO DE LA MEMORIA RAM
-			cstm.setInt(1, c.getNum_cate());
-			cstm.setString(2, c.getNom_cate());
+			cstm.setInt(1, c.getCod_prov());
+			cstm.setString(2, c.getRuc_prov());
+			cstm.setString(3, c.getNom_prov());
+			cstm.setString(4, c.getTelf_prov());
+			cstm.setString(5, c.getDire_prov());
+			cstm.setString(6, c.getCorreo_prov());
+			cstm.setString(7, c.getWeb_prov());
 
 			//COMPROBANDO LO Q TIENE CSTM
 			System.out.println("==>"+cstm);
@@ -100,7 +110,7 @@ public class CategoriaDAO implements ICategoriaDAO {
 	}
 
 	@Override
-	public int eliminarCategoria(int num_cate) {
+	public int eliminarProveedor(int cod_prov) {
 		//DECLARAR VARIABLE PARA EL RESULTADO
 		int r=-1;
 		
@@ -115,10 +125,10 @@ public class CategoriaDAO implements ICategoriaDAO {
 			cone=MySqlConexion.miConexion();
 			
 			//PASO 02 - PREPARAR CALLABLESTATEMENT
-			cstm=cone.prepareCall("{CALL SP_ELIMINAR_CATEGORIA(?)}");
+			cstm=cone.prepareCall("{CALL SP_ELIMINAR_PROVEEDOR(?)}");
 			
 			//PASO 03 - ENVIAR LOS DATOS A CSTM OBTENIDO DE LA MEMORIA RAM
-			cstm.setInt(1, num_cate);
+			cstm.setInt(1, cod_prov);
 			//COMPROBANDO LO Q TIENE CSTM
 			System.out.println("==>"+cstm);
 			
@@ -143,18 +153,23 @@ public class CategoriaDAO implements ICategoriaDAO {
 	}
 
 	@Override
-	public Categoria buscarCategoria(int num_cate) {
+	public Proveedor buscarProveedor(int cod_prov) {
 		Connection cone=null;
 		CallableStatement cstm=null;
 		ResultSet rs=null;
-		Categoria cate=new Categoria();
+		Proveedor prov=new Proveedor();
 		try {
 			cone=MySqlConexion.miConexion();
-			cstm=cone.prepareCall("{CALL SP_BUSCAR_CATEGORIA(?)}");
-			cstm.setInt(1, num_cate);
+			cstm=cone.prepareCall("{CALL SP_BUSCAR_PROVEEDOR(?)}");
+			cstm.setInt(1, cod_prov);
 			rs=cstm.executeQuery();
 			while(rs.next()) {
-				cate.setNom_cate(rs.getString(2));
+				prov.setRuc_prov(rs.getString(2));
+				prov.setNom_prov(rs.getString(3));
+				prov.setTelf_prov(rs.getString(4));
+				prov.setDire_prov(rs.getString(5));
+				prov.setCorreo_prov(rs.getString(6));
+				prov.setWeb_prov(rs.getString(7));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -169,32 +184,36 @@ public class CategoriaDAO implements ICategoriaDAO {
 			}
 		}
 		
-		return cate;
+		return prov;
 	}
 
 	@Override
-	public ArrayList<Categoria> listadoCategoria() {
+	public ArrayList<Proveedor> listadoProveedor() {
 		Connection cone=null;
 		CallableStatement cstm=null;
 		ResultSet rs=null;
-		ArrayList<Categoria>listame=new ArrayList<Categoria>();
+		ArrayList<Proveedor>listame=new ArrayList<Proveedor>();
 		
 		try {
 			//Invocar conexion
 			cone=MySqlConexion.miConexion();
 			//Preparar el cstm
-			cstm=cone.prepareCall("{CALL SP_LISTAR_CATEGORIA()}");
+			cstm=cone.prepareCall("{CALL SP_LISTAR_PROVEEDOR()}");
 			//Enviar lo q tiene cstm a rs
 			rs=cstm.executeQuery();
 			//Haciendo el recorrido
 			while(rs.next()) {
 				//Declarar un objeto basado a cliente
-				Categoria cate=new Categoria();
-				cate.setNum_cate((rs.getInt(1)));
-				cate.setNom_cate(rs.getString(2));
-
+				Proveedor prov=new Proveedor();
+				prov.setCod_prov(rs.getInt(1));
+				prov.setRuc_prov(rs.getString(2));
+				prov.setNom_prov(rs.getString(3));
+				prov.setTelf_prov(rs.getString(4));
+				prov.setDire_prov(rs.getString(5));
+				prov.setCorreo_prov(rs.getString(6));
+				prov.setWeb_prov(rs.getString(7));
 				//Enviando cli a listame
-				listame.add(cate);
+				listame.add(prov);
 			}
 
 		} catch (Exception e) {
