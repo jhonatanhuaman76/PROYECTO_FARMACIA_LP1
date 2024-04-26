@@ -42,7 +42,6 @@ public class CategoriaDAO implements ICategoriaDAO {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
 		}
 		
 		return r;
@@ -82,7 +81,6 @@ public class CategoriaDAO implements ICategoriaDAO {
 			}
 			
 		}
-		
 		return r;
 	}
 
@@ -117,7 +115,6 @@ public class CategoriaDAO implements ICategoriaDAO {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
 		}
 		
 		return r;
