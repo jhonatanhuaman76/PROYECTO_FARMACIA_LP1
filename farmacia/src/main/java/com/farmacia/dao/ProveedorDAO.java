@@ -27,7 +27,7 @@ public class ProveedorDAO implements IProveedorDAO{
 			cone=MySqlConexion.miConexion();
 			
 			//PASO 02 - PREPARAR CALLABLESTATEMENT
-			cstm=cone.prepareCall("{CALL SP_REGISTRAR_PROVEEDOR(null, ?, ?, ?, ?, ?, ?)}");
+			cstm=cone.prepareCall("{CALL SP_REGISTRAR_PROVEEDOR(?, ?, ?, ?, ?, ?)}");
 			
 			//PASO 03 - ENVIAR LOS DATOS A CSTM OBTENIDO DE LA MEMORIA RAM
 			cstm.setString(1, c.getRuc_prov());
