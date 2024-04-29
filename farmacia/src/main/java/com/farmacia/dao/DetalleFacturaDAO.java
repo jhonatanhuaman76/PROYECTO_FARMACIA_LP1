@@ -5,14 +5,14 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
-import com.farmacia.entidad.Lote;
-import com.farmacia.interfaces.ILoteDAO;
+import com.farmacia.entidad.DetalleFactura;
+import com.farmacia.interfaces.IDetalleFacturaDAO;
 import com.farmacia.util.MySqlConexion;
 
-public class LoteDAO implements ILoteDAO {
+public class DetalleFacturaDAO implements IDetalleFacturaDAO {
 
 	@Override
-	public int registrarLote(Lote c) {
+	public int registrarDetalleFactura(DetalleFactura c) {
 		//Declarar una variable para el resultado
 		int r = -1;
 		
@@ -25,56 +25,16 @@ public class LoteDAO implements ILoteDAO {
 			cone = MySqlConexion.miConexion();
 			
 			//Preparar el callableStatement
-			cstm = cone.prepareCall("{call SP_REGISTRAR_LOTE(?,?,?,?,?)}");
-			
-			//Enviar los datos a cstm obtenidos por la memoria ram
-			cstm.setInt(1, c.getCod_pro());
-			cstm.setInt(2, c.getStock());
-			cstm.setString(3, c.getFecha_venc());
-			cstm.setString(4, c.getFecha_fab());
-			cstm.setString(5, c.getCond_trans());
-			
-			//Ejecutamos el callablestatement
-			r=cstm.executeUpdate();
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if(cone!=null) cone.close();
-				if(cstm!=null) cstm.close();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			
-		}
-		
-		return r;
-	}
-
-	@Override
-	public int modificarLote(Lote c) {
-		//Declarar una variable para el resultado
-		int r = -1;
-		
-		//Declarar objeto para la conexion
-		Connection cone = null;
-		
-		//Declarar objeto para manipular procedimiento almacenado
-		CallableStatement cstm = null;
-		try {
-			cone = MySqlConexion.miConexion();
-			
-			//Preparar el callableStatement
-			cstm = cone.prepareCall("{call SP_MODIFICAR_LOTE(?,?,?,?,?,?,?)}");
+			cstm = cone.prepareCall("{call SP_REGISTRAR_DETALLE_FACTURA(?,?,?,?,?,?,?)}");
 			
 			//Enviar los datos a cstm obtenidos por la memoria ram
 			cstm.setInt(1, c.getNro_lote());
-			cstm.setInt(2, c.getCod_pro());
-			cstm.setInt(3, c.getStock());
-			cstm.setString(4, c.getFecha_venc());
-			cstm.setString(5, c.getFecha_fab());
-			cstm.setString(6, c.getCond_trans());
+			cstm.setInt(2, c.getNro_factura());
+			cstm.setInt(3, c.getCod_pro());
+			cstm.setInt(4, c.getCod_uni());
+			cstm.setInt(5, c.getCant_recib_base());
+			cstm.setInt(6, c.getCant_recib_pres());
+			cstm.setDouble(7, c.getPre_unit_compra());
 			
 			//Ejecutamos el callablestatement
 			r=cstm.executeUpdate();
@@ -88,14 +48,13 @@ public class LoteDAO implements ILoteDAO {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
 		}
 		
 		return r;
 	}
 
 	@Override
-	public int eliminarLote(int nro_lote) {
+	public int modificarDetalleFactura(DetalleFactura c) {
 		//Declarar una variable para el resultado
 		int r = -1;
 		
@@ -108,10 +67,16 @@ public class LoteDAO implements ILoteDAO {
 			cone = MySqlConexion.miConexion();
 			
 			//Preparar el callableStatement
-			cstm = cone.prepareCall("{call SP_ELIMINAR_LOTE(?)}");
+			cstm = cone.prepareCall("{call SP_MODIFICAR_DETALLE_FACTURA(?,?)}");
 			
 			//Enviar los datos a cstm obtenidos por la memoria ram
-			cstm.setInt(1, nro_lote);
+			cstm.setInt(1, c.getNro_lote());
+			cstm.setInt(2, c.getNro_factura());
+			cstm.setInt(3, c.getCod_pro());
+			cstm.setInt(4, c.getCod_uni());
+			cstm.setInt(5, c.getCant_recib_base());
+			cstm.setInt(6, c.getCant_recib_pres());
+			cstm.setDouble(7, c.getPre_unit_compra());
 			
 			//Ejecutamos el callablestatement
 			r=cstm.executeUpdate();
@@ -127,14 +92,50 @@ public class LoteDAO implements ILoteDAO {
 			}
 			
 		}
+		return r;
+	}
+
+	@Override
+	public int eliminarDetalleFactura(int cod_lote, int cod_factura) {
+		//Declarar una variable para el resultado
+		int r = -1;
+		
+		//Declarar objeto para la conexion
+		Connection cone = null;
+		
+		//Declarar objeto para manipular procedimiento almacenado
+		CallableStatement cstm = null;
+		try {
+			cone = MySqlConexion.miConexion();
+			
+			//Preparar el callableStatement
+			cstm = cone.prepareCall("{call SP_ELIMINAR_DETALLE_FACTURA(?,?)}");
+			
+			//Enviar los datos a cstm obtenidos por la memoria ram
+			cstm.setInt(1, cod_lote);
+			cstm.setInt(2, cod_factura);
+			
+			//Ejecutamos el callablestatement
+			r=cstm.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(cone!=null) cone.close();
+				if(cstm!=null) cstm.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 		
 		return r;
 	}
 
 	@Override
-	public Lote buscarLote(int nro_lote) {
+	public DetalleFactura buscarDetalleFactura(int cod_lote, int cod_factura) {
 		//Declaramos objeto cliente
-		Lote c = new Lote();
+		DetalleFactura c = new DetalleFactura();
 		
 		//Declarar objeto para la conexion
 		Connection cone = null;
@@ -148,10 +149,11 @@ public class LoteDAO implements ILoteDAO {
 			cone = MySqlConexion.miConexion();
 			
 			//Preparar el callableStatement
-			cstm = cone.prepareCall("{call SP_BUSCAR_LOTE(?)}");
+			cstm = cone.prepareCall("{call SP_BUSCAR_DETALLE_FACTURA(?,?)}");
 			
 			//Enviar los datos a cstm obtenidos por la memoria ram
-			cstm.setInt(1, nro_lote);
+			cstm.setInt(1, cod_lote);
+			cstm.setInt(2, cod_factura);
 			
 			//Ejecutamos el callablestatement
 			rs=cstm.executeQuery();
@@ -159,11 +161,12 @@ public class LoteDAO implements ILoteDAO {
 			while(rs.next()) {
 				//Llenamos el objeto cliente con los datos
 				c.setNro_lote(rs.getInt(1));
-				c.setCod_pro(rs.getInt(2));
-				c.setStock(rs.getInt(3));
-				c.setFecha_venc(rs.getString(4));
-				c.setFecha_fab(rs.getString(5));				
-				c.setCond_trans(rs.getString(6));
+				c.setNro_factura(rs.getInt(2));
+				c.setCod_pro(rs.getInt(3));
+				c.setCod_uni(rs.getInt(4));
+				c.setCant_recib_base(rs.getInt(5)); 
+				c.setCant_recib_pres(rs.getInt(6)); 
+				c.setPre_unit_compra(rs.getDouble(7)); 
 			}
 			
 		} catch (Exception e) {
@@ -182,9 +185,9 @@ public class LoteDAO implements ILoteDAO {
 	}
 
 	@Override
-	public ArrayList<Lote> listadoLote() {
+	public ArrayList<DetalleFactura> listadoDetalleFactura() {
 		//Declaramos la lista de los clientes
-		ArrayList<Lote> data = new ArrayList<Lote>();
+		ArrayList<DetalleFactura> data = new ArrayList<DetalleFactura>();
 		
 		//Declarar objeto para la conexion
 		Connection cone = null;
@@ -199,23 +202,21 @@ public class LoteDAO implements ILoteDAO {
 			cone = MySqlConexion.miConexion();
 			
 			//Preparar el callableStatement
-			cstm = cone.prepareCall("{call SP_LISTAR_LOTE()}");
+			cstm = cone.prepareCall("{call SP_LISTAR_DETALLE_FACTURA()}");
 			
 			//Ejecutamos el callablestatement, enviar lo que tiene cstm a rs
 			rs=cstm.executeQuery();
 			
 			//Llenamos la lista con los clientes de la base de datos
 			while(rs.next()) {
-				Lote c = new Lote();
+				DetalleFactura c = new DetalleFactura();
 				c.setNro_lote(rs.getInt(1));
-				c.setCod_pro(rs.getInt(2));
-				c.setStock(rs.getInt(3));
-				c.setFecha_venc(rs.getString(4));
-				c.setFecha_fab(rs.getString(5));				
-				c.setCond_trans(rs.getString(6));
-				c.setNom_pro(rs.getString(7));
-				c.setPre_unit_venta(rs.getDouble(8));
-				c.setPre_unit_compra(rs.getDouble(9));
+				c.setNro_factura(rs.getInt(2));
+				c.setCod_pro(rs.getInt(3));
+				c.setCod_uni(rs.getInt(4));
+				c.setCant_recib_base(rs.getInt(5)); 
+				c.setCant_recib_pres(rs.getInt(6)); 
+				c.setPre_unit_compra(rs.getDouble(7)); 
 				
 				data.add(c);
 			}

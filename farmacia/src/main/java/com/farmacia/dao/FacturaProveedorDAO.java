@@ -5,14 +5,14 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
-import com.farmacia.entidad.Lote;
-import com.farmacia.interfaces.ILoteDAO;
+import com.farmacia.entidad.FacturaProveedor;
+import com.farmacia.interfaces.IFacturaProveedorDAO;
 import com.farmacia.util.MySqlConexion;
 
-public class LoteDAO implements ILoteDAO {
+public class FacturaProveedorDAO implements IFacturaProveedorDAO {
 
 	@Override
-	public int registrarLote(Lote c) {
+	public int registrarFacturaProveedor(FacturaProveedor c) {
 		//Declarar una variable para el resultado
 		int r = -1;
 		
@@ -25,14 +25,53 @@ public class LoteDAO implements ILoteDAO {
 			cone = MySqlConexion.miConexion();
 			
 			//Preparar el callableStatement
-			cstm = cone.prepareCall("{call SP_REGISTRAR_LOTE(?,?,?,?,?)}");
+			cstm = cone.prepareCall("{call SP_REGISTRAR_FACTURA_PROVEEDOR(?,?,?,?)}");
 			
 			//Enviar los datos a cstm obtenidos por la memoria ram
-			cstm.setInt(1, c.getCod_pro());
-			cstm.setInt(2, c.getStock());
-			cstm.setString(3, c.getFecha_venc());
-			cstm.setString(4, c.getFecha_fab());
-			cstm.setString(5, c.getCond_trans());
+			cstm.setInt(1, c.getCod_prov());
+			cstm.setInt(2, c.getCod_emp());
+			cstm.setString(3, c.getFecha_em());
+			cstm.setString(4, c.getMetodo_pago());
+			
+			//Ejecutamos el callablestatement
+			r=cstm.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(cone!=null) cone.close();
+				if(cstm!=null) cstm.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return r;
+	}
+
+	@Override
+	public int modificarFacturaProveedor(FacturaProveedor c) {
+		//Declarar una variable para el resultado
+		int r = -1;
+		
+		//Declarar objeto para la conexion
+		Connection cone = null;
+		
+		//Declarar objeto para manipular procedimiento almacenado
+		CallableStatement cstm = null;
+		try {
+			cone = MySqlConexion.miConexion();
+			
+			//Preparar el callableStatement
+			cstm = cone.prepareCall("{call SP_MODIFICAR_FACTURA_PROVEEDOR(?,?,?,?,?)}");
+			
+			//Enviar los datos a cstm obtenidos por la memoria ram
+			cstm.setInt(1, c.getCod_factura());
+			cstm.setInt(2, c.getCod_prov());
+			cstm.setInt(3, c.getCod_emp());
+			cstm.setString(4, c.getFecha_em());
+			cstm.setString(5, c.getMetodo_pago());
 			
 			//Ejecutamos el callablestatement
 			r=cstm.executeUpdate();
@@ -48,12 +87,11 @@ public class LoteDAO implements ILoteDAO {
 			}
 			
 		}
-		
 		return r;
 	}
 
 	@Override
-	public int modificarLote(Lote c) {
+	public int eliminarFacturaProveedor(int cod_Factura) {
 		//Declarar una variable para el resultado
 		int r = -1;
 		
@@ -66,15 +104,10 @@ public class LoteDAO implements ILoteDAO {
 			cone = MySqlConexion.miConexion();
 			
 			//Preparar el callableStatement
-			cstm = cone.prepareCall("{call SP_MODIFICAR_LOTE(?,?,?,?,?,?,?)}");
+			cstm = cone.prepareCall("{call SP_ELIMINAR_FACTURA_PROVEEDOR(?)}");
 			
 			//Enviar los datos a cstm obtenidos por la memoria ram
-			cstm.setInt(1, c.getNro_lote());
-			cstm.setInt(2, c.getCod_pro());
-			cstm.setInt(3, c.getStock());
-			cstm.setString(4, c.getFecha_venc());
-			cstm.setString(5, c.getFecha_fab());
-			cstm.setString(6, c.getCond_trans());
+			cstm.setInt(1, cod_Factura);
 			
 			//Ejecutamos el callablestatement
 			r=cstm.executeUpdate();
@@ -88,53 +121,15 @@ public class LoteDAO implements ILoteDAO {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
 		}
 		
 		return r;
 	}
 
 	@Override
-	public int eliminarLote(int nro_lote) {
-		//Declarar una variable para el resultado
-		int r = -1;
-		
-		//Declarar objeto para la conexion
-		Connection cone = null;
-		
-		//Declarar objeto para manipular procedimiento almacenado
-		CallableStatement cstm = null;
-		try {
-			cone = MySqlConexion.miConexion();
-			
-			//Preparar el callableStatement
-			cstm = cone.prepareCall("{call SP_ELIMINAR_LOTE(?)}");
-			
-			//Enviar los datos a cstm obtenidos por la memoria ram
-			cstm.setInt(1, nro_lote);
-			
-			//Ejecutamos el callablestatement
-			r=cstm.executeUpdate();
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if(cone!=null) cone.close();
-				if(cstm!=null) cstm.close();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			
-		}
-		
-		return r;
-	}
-
-	@Override
-	public Lote buscarLote(int nro_lote) {
+	public FacturaProveedor buscarFacturaProveedor(int cod_Factura) {
 		//Declaramos objeto cliente
-		Lote c = new Lote();
+		FacturaProveedor c = new FacturaProveedor();
 		
 		//Declarar objeto para la conexion
 		Connection cone = null;
@@ -148,22 +143,21 @@ public class LoteDAO implements ILoteDAO {
 			cone = MySqlConexion.miConexion();
 			
 			//Preparar el callableStatement
-			cstm = cone.prepareCall("{call SP_BUSCAR_LOTE(?)}");
+			cstm = cone.prepareCall("{call SP_BUSCAR_FACTURA_PROVEEDOR(?)}");
 			
 			//Enviar los datos a cstm obtenidos por la memoria ram
-			cstm.setInt(1, nro_lote);
+			cstm.setInt(1, cod_Factura);
 			
 			//Ejecutamos el callablestatement
 			rs=cstm.executeQuery();
 			
 			while(rs.next()) {
 				//Llenamos el objeto cliente con los datos
-				c.setNro_lote(rs.getInt(1));
-				c.setCod_pro(rs.getInt(2));
-				c.setStock(rs.getInt(3));
-				c.setFecha_venc(rs.getString(4));
-				c.setFecha_fab(rs.getString(5));				
-				c.setCond_trans(rs.getString(6));
+				c.setCod_factura(rs.getInt(1));
+				c.setCod_prov(rs.getInt(2));
+				c.setCod_emp(rs.getInt(3));
+				c.setFecha_em(rs.getString(4));
+				c.setMetodo_pago(rs.getString(5));
 			}
 			
 		} catch (Exception e) {
@@ -182,9 +176,9 @@ public class LoteDAO implements ILoteDAO {
 	}
 
 	@Override
-	public ArrayList<Lote> listadoLote() {
+	public ArrayList<FacturaProveedor> listadoFacturaProveedor() {
 		//Declaramos la lista de los clientes
-		ArrayList<Lote> data = new ArrayList<Lote>();
+		ArrayList<FacturaProveedor> data = new ArrayList<FacturaProveedor>();
 		
 		//Declarar objeto para la conexion
 		Connection cone = null;
@@ -199,23 +193,19 @@ public class LoteDAO implements ILoteDAO {
 			cone = MySqlConexion.miConexion();
 			
 			//Preparar el callableStatement
-			cstm = cone.prepareCall("{call SP_LISTAR_LOTE()}");
+			cstm = cone.prepareCall("{call SP_LISTAR_FACTURA_PROVEEDOR()}");
 			
 			//Ejecutamos el callablestatement, enviar lo que tiene cstm a rs
 			rs=cstm.executeQuery();
 			
 			//Llenamos la lista con los clientes de la base de datos
 			while(rs.next()) {
-				Lote c = new Lote();
-				c.setNro_lote(rs.getInt(1));
-				c.setCod_pro(rs.getInt(2));
-				c.setStock(rs.getInt(3));
-				c.setFecha_venc(rs.getString(4));
-				c.setFecha_fab(rs.getString(5));				
-				c.setCond_trans(rs.getString(6));
-				c.setNom_pro(rs.getString(7));
-				c.setPre_unit_venta(rs.getDouble(8));
-				c.setPre_unit_compra(rs.getDouble(9));
+				FacturaProveedor c = new FacturaProveedor();
+				c.setCod_factura(rs.getInt(1));
+				c.setCod_prov(rs.getInt(2));
+				c.setCod_emp(rs.getInt(3));
+				c.setFecha_em(rs.getString(4));
+				c.setMetodo_pago(rs.getString(5));
 				
 				data.add(c);
 			}

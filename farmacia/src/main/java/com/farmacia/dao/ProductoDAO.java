@@ -3,6 +3,7 @@ package com.farmacia.dao;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import com.farmacia.entidad.Producto;
@@ -166,21 +167,23 @@ public class ProductoDAO implements IProductoDAO {
 			
 			while(rs.next()) {
 				//Llenamos el objeto cliente con los datos
-				c.setCod_pro(cstm.getInt(1));
-				c.setNum_cate(cstm.getInt(2));
-				c.setNom_pro(cstm.getString(3));
-				c.setPre_unit_compra(cstm.getDouble(4));
-				c.setPre_unit_venta(cstm.getDouble(5));
-				c.setStock_min(cstm.getInt(6));
-				c.setStock_max(cstm.getInt(7));
-				c.setCod_marca(cstm.getInt(8));
-				c.setPres(cstm.getString(9));
-				c.setM_control(cstm.getInt(10));
+				c.setCod_pro(rs.getInt(1));
+				c.setNum_cate(rs.getInt(2));
+				c.setNom_pro(rs.getString(3));
+				c.setPre_unit_compra(rs.getDouble(4));
+				c.setPre_unit_venta(rs.getDouble(5));
+				c.setStock_min(rs.getInt(6));
+				c.setStock_max(rs.getInt(7));
+				c.setCod_marca(rs.getInt(8));
+				c.setPres(rs.getString(9));
+				c.setM_control(rs.getInt(10));
 			}
 			
-		} catch (Exception e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally {
+		} catch(Exception e){
+			e.printStackTrace();
+		}finally {
 			try {
 				if(cone!=null) cone.close();
 				if(cstm!=null) cstm.close();
@@ -219,16 +222,16 @@ public class ProductoDAO implements IProductoDAO {
 			//Llenamos la lista con los clientes de la base de datos
 			while(rs.next()) {
 				Producto c = new Producto();
-				c.setCod_pro(cstm.getInt(1));
-				c.setNum_cate(cstm.getInt(2));
-				c.setNom_pro(cstm.getString(3));
-				c.setPre_unit_compra(cstm.getDouble(4));
-				c.setPre_unit_venta(cstm.getDouble(5));
-				c.setStock_min(cstm.getInt(6));
-				c.setStock_max(cstm.getInt(7));
-				c.setCod_marca(cstm.getInt(8));
-				c.setPres(cstm.getString(9));
-				c.setM_control(cstm.getInt(10));
+				c.setCod_pro(rs.getInt(1));
+				c.setNum_cate(rs.getInt(2));
+				c.setNom_pro(rs.getString(3));
+				c.setPre_unit_compra(rs.getDouble(4));
+				c.setPre_unit_venta(rs.getDouble(5));
+				c.setStock_min(rs.getInt(6));
+				c.setStock_max(rs.getInt(7));
+				c.setCod_marca(rs.getInt(8));
+				c.setPres(rs.getString(9));
+				c.setM_control(rs.getInt(10));
 				
 				data.add(c);
 			}

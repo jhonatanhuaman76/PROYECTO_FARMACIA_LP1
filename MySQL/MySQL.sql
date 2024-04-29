@@ -442,6 +442,15 @@ COD_PROD	 		INT
 SELECT * FROM UM_PRODUCTO
 WHERE COD_UNIDAD  = COD_UNI AND COD_PRODUCTO = COD_PROD;
 
+CREATE PROCEDURE SP_LISTAR_UM_PRODUCTO_X_COD_PROD(
+COD_PROD			INT
+)
+SELECT * 
+FROM UM_PRODUCTO
+INNER JOIN UNIDAD_MEDIDA
+ON UM_PRODUCTO.COD_UNIDAD = UNIDAD_MEDIDA.COD_UNIDAD
+WHERE COD_PRODUCTO = COD_PROD;
+
 /*PROCEDIMIENTOS ALMACENADOS PARA LOTE-------------------------------------------------------------------------------------*/
 CREATE PROCEDURE SP_REGISTRAR_LOTE(
 COD_PRO				INT,
@@ -474,7 +483,14 @@ DELETE FROM LOTE
 WHERE NRO_LOTE = COD_LOTE;
 
 CREATE PROCEDURE SP_LISTAR_LOTE()
-SELECT * FROM LOTE;
+SELECT 
+LOTE.*,
+PRODUCTO.NOMBRE_PRODUCTO,
+PRODUCTO.PRECIO_UNIT_VENTA,
+PRODUCTO.PRECIO_UNIT_COMPRA
+FROM LOTE
+INNER JOIN PRODUCTO
+ON LOTE.COD_PROD = PRODUCTO.COD_PROD;
 
 CREATE PROCEDURE SP_BUSCAR_LOTE(
 COD_LOTE			INT
@@ -483,13 +499,20 @@ SELECT * FROM LOTE
 WHERE NRO_LOTE = COD_LOTE;
 
 /*PROCEDIMIENTOS ALMACENADOS PARA BOLETA-------------------------------------------------------------------------------------*/
+DELIMITER //
 CREATE PROCEDURE SP_REGISTRAR_BOLETA(
 COD_CLI				INT,
 COD_EMP				INT,
 MET_PAGO			VARCHAR(15),
 FECHA_EM			DATE
 )
-INSERT INTO BOLETA VALUES(NULL, COD_CLI, COD_EMP, MET_PAGO, FECHA_EM);
+BEGIN
+	DECLARE P_COD_BOLETA INT;
+	INSERT INTO BOLETA VALUES(NULL, COD_CLI, COD_EMP, MET_PAGO, FECHA_EM);
+    SET P_COD_BOLETA = last_insert_id();
+    SELECT P_COD_BOLETA;
+END //
+DELIMITER ;
 
 CREATE PROCEDURE SP_MODIFICAR_BOLETA(
 COD_BOLE			INT,
@@ -512,7 +535,7 @@ DELETE FROM BOLETA
 WHERE COD_BOLETA = COD_BOLE;
 
 CREATE PROCEDURE SP_LISTAR_BOLETA()
-SELECT * FROM MARCA;
+SELECT * FROM BOLETA;
 
 CREATE PROCEDURE SP_BUSCAR_BOLETA(
 COD_BOLE			INT
@@ -649,3 +672,43 @@ COD_FAC 			INT
 )
 SELECT * FROM DETALLE_FACTURA
 WHERE COD_LOTE = COD_LOT AND COD_FACTURA = COD_FACTURA;
+
+/*INSERTANDO DATOS PARA CLIENTE -------------------------------------------------------------------------------------*/
+call SP_REGISTRAR_CLIENTE("", "PUBLICO", "GENERAL");
+call SP_REGISTRAR_CLIENTE("95136248", "ADRIEL", "PINTADO");
+
+/*INSERTANDO DATOS PARA EMPLEADO -------------------------------------------------------------------------------------*/
+call SP_REGISTRAR_EMPLEADO("63215984", "JHONATAN", "HUAMAN", "963258471", "JHONATAN@gmail.com", "Mateo Silva MzB ltD, San Luis", "a", "jhonatan123", "123");
+
+/*INSERTANDO DATOS PARA MARCA -------------------------------------------------------------------------------------*/
+call SP_REGISTRAR_MARCA("Bayer");
+call SP_REGISTRAR_MARCA("Saval");
+
+/*INSERTANDO DATOS PARA CATEGORIA -------------------------------------------------------------------------------------*/
+call SP_REGISTRAR_CATEGORIA("ANTIINFLAMATORIO");
+call SP_REGISTRAR_CATEGORIA("ANTIBIOTICO");
+
+/*INSERTANDO DATOS PARA UNIDAD DE MEDIDA -------------------------------------------------------------------------------------*/
+call SP_REGISTRAR_UM("UND", "UNIDAD");
+call SP_REGISTRAR_UM("BLR", "BLISTER");
+call SP_REGISTRAR_UM("CAJ", "CAJA");
+
+/*INSERTANDO DATOS PARA PRODUCTO -------------------------------------------------------------------------------------*/
+call SP_REGISTRAR_PRODUCTO(1, "ASPIRINA", 4.00, 6.40, 10, 400, 1, "CAJA", 0);
+call SP_REGISTRAR_PRODUCTO(2, "AMOVAL", 6.00, 10.40, 10, 400, 1, "CAJA", 0);
+
+/*INSERTANDO DATOS PARA UM_MEDIDA -------------------------------------------------------------------------------------*/
+call SP_REGISTRAR_UM_PRODUCTO(1,1, 1);
+call SP_REGISTRAR_UM_PRODUCTO(2,1, 10);
+call SP_REGISTRAR_UM_PRODUCTO(1,2, 1);
+
+/*INSERTANDO DATOS PARA LOTE -------------------------------------------------------------------------------------*/
+call SP_REGISTRAR_LOTE(1,300,"2024-07-12", "2024-01-12", "ADECUADA");
+call SP_REGISTRAR_LOTE(2,300,"2024-08-12", "2024-02-12", "ADECUADA");
+
+/*INSERTANDO DATOS PARA BOLETA -------------------------------------------------------------------------------------*/
+call SP_REGISTRAR_BOLETA(1,1,"EFECTIVO", "2021-04-26");
+
+/*INSERTANDO DATOS PARA DETALLE BOLETA -------------------------------------------------------------------------------------*/
+call SP_REGISTRAR_DETALLE_BOLETA(1,1,1,2,100,10, 6.40);
+call SP_REGISTRAR_DETALLE_BOLETA(1,2,1,2,100,10, 10.40);
