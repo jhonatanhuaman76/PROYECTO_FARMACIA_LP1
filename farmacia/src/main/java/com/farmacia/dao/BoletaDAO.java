@@ -91,8 +91,7 @@ public class BoletaDAO implements IBoletaDAO {
 				if(cstm!=null) cstm.close();
 			} catch (Exception e) {
 				e.printStackTrace();
-			}
-			
+			}	
 		}
 		return r;
 	}
@@ -232,5 +231,4 @@ public class BoletaDAO implements IBoletaDAO {
 		
 		return data;
 	}
-
 }
