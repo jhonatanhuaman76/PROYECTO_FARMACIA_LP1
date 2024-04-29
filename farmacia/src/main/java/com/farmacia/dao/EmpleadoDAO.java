@@ -27,7 +27,7 @@ public class EmpleadoDAO implements IEmpleadoDAO{
 			cone=MySqlConexion.miConexion();
 			
 			//PASO 02 - PREPARAR CALLABLESTATEMENT
-			cstm=cone.prepareCall("{CALL SP_REGISTRAR_EMPLEADO(null, ?, ?, ?, ?, ?, ?, ?, ?, ?)}");
+			cstm=cone.prepareCall("{CALL SP_REGISTRAR_EMPLEADO(?, ?, ?, ?, ?, ?, ?, ?, ?)}");
 			
 			//PASO 03 - ENVIAR LOS DATOS A CSTM OBTENIDO DE LA MEMORIA RAM
 			cstm.setString(1, c.getDni_emp());
