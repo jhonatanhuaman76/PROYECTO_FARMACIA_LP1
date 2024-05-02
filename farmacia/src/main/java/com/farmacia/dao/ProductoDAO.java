@@ -74,7 +74,7 @@ public class ProductoDAO implements IProductoDAO {
 			
 			//Enviar los datos a cstm obtenidos por la memoria ram
 			cstm.setInt(1, c.getCod_pro());
-			cstm.setInt(2, c.getNum_cate());
+			cstm.setString(2, null);
 			cstm.setString(3, c.getNom_pro());
 			cstm.setDouble(4, c.getPre_unit_compra());
 			cstm.setDouble(5, c.getPre_unit_venta());
