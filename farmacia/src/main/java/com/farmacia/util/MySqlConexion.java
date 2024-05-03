@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class MySqlConexion {
 	private static String url = "jdbc:mysql://localhost:3306/bd_farmaplus?useSSL=false&TimeZone=true&serverTimezone=UTC";
 	private static String usuario = "root";
-	private static String password = "mysql";
+	private static String password = "carlossc";
 	
 	public static Connection miConexion() {
 		Connection cn = null;
