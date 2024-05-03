@@ -144,7 +144,7 @@ public class UmProductoDAO implements IUmProductoDAO {
 			cone = MySqlConexion.miConexion();
 			
 			//Preparar el callableStatement
-			cstm = cone.prepareCall("{call SP_BUSCAR_UM_PRODUCTO(?)}");
+			cstm = cone.prepareCall("{call SP_BUSCAR_UM_PRODUCTO(?,?)}");
 			
 			//Enviar los datos a cstm obtenidos por la memoria ram
 			cstm.setInt(1, c.getCod_uni());
@@ -156,7 +156,7 @@ public class UmProductoDAO implements IUmProductoDAO {
 			while(rs.next()) {
 				//Llenamos el objeto cliente con los datos
 				c.setCod_uni(rs.getInt(1));
-				c.setCod_pro(rs.getInt(3));
+				c.setCod_pro(rs.getInt(2));
 				c.setFactor(rs.getInt(3));
 			}
 			
@@ -202,8 +202,61 @@ public class UmProductoDAO implements IUmProductoDAO {
 			while(rs.next()) {
 				UmProducto c = new UmProducto();
 				c.setCod_uni(rs.getInt(1));
-				c.setCod_pro(rs.getInt(3));
+				c.setCod_pro(rs.getInt(2));
 				c.setFactor(rs.getInt(3));
+				
+				data.add(c);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(cone!=null) cone.close();
+				if(cstm!=null) cstm.close();
+				if(rs!=null) rs.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+		}
+		
+		return data;
+	}
+
+	@Override
+	public ArrayList<UmProducto> listadoUmProductoxCodigoProd(int cod_prod) {
+		//Declaramos la lista de los clientes
+		ArrayList<UmProducto> data = new ArrayList<UmProducto>();
+		
+		//Declarar objeto para la conexion
+		Connection cone = null;
+		
+		//Declarar objeto para manipular procedimiento almacenado
+		CallableStatement cstm = null;
+		
+		//Declarar objeto ResultSet que tiene el resultado del SELECT, para hacer listado
+		ResultSet rs = null;
+		
+		try {
+			cone = MySqlConexion.miConexion();
+			
+			//Preparar el callableStatement
+			cstm = cone.prepareCall("{call SP_LISTAR_UM_PRODUCTO_X_COD_PROD(?)}");
+			
+			cstm.setInt(1, cod_prod);
+			
+			//Ejecutamos el callablestatement, enviar lo que tiene cstm a rs
+			rs=cstm.executeQuery();
+			
+			//Llenamos la lista con los clientes de la base de datos
+			while(rs.next()) {
+				UmProducto c = new UmProducto();
+				c.setCod_uni(rs.getInt(1));
+				c.setCod_pro(rs.getInt(2));
+				c.setFactor(rs.getInt(3));
+				c.setAbtr_uni(rs.getString(4));
+				c.setDes_uni(rs.getString(5));
 				
 				data.add(c);
 			}

@@ -213,6 +213,9 @@ public class LoteDAO implements ILoteDAO {
 				c.setFecha_venc(rs.getString(4));
 				c.setFecha_fab(rs.getString(5));				
 				c.setCond_trans(rs.getString(6));
+				c.setNom_pro(rs.getString(7));
+				c.setPre_unit_venta(rs.getDouble(8));
+				c.setPre_unit_compra(rs.getDouble(9));
 				
 				data.add(c);
 			}
@@ -232,5 +235,4 @@ public class LoteDAO implements ILoteDAO {
 		
 		return data;
 	}
-
 }

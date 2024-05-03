@@ -3,17 +3,16 @@ package com.farmacia.dao;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
-import com.farmacia.entidad.Producto;
-import com.farmacia.interfaces.IProductoDAO;
+import com.farmacia.entidad.FacturaProveedor;
+import com.farmacia.interfaces.IFacturaProveedorDAO;
 import com.farmacia.util.MySqlConexion;
 
-public class ProductoDAO implements IProductoDAO {
+public class FacturaProveedorDAO implements IFacturaProveedorDAO {
 
 	@Override
-	public int registrarProducto(Producto c) {
+	public int registrarFacturaProveedor(FacturaProveedor c) {
 		//Declarar una variable para el resultado
 		int r = -1;
 		
@@ -26,18 +25,53 @@ public class ProductoDAO implements IProductoDAO {
 			cone = MySqlConexion.miConexion();
 			
 			//Preparar el callableStatement
-			cstm = cone.prepareCall("{call SP_REGISTRAR_PRODUCTO(?,?,?,?,?,?,?,?,?)}");
+			cstm = cone.prepareCall("{call SP_REGISTRAR_FACTURA_PROVEEDOR(?,?,?,?)}");
 			
 			//Enviar los datos a cstm obtenidos por la memoria ram
-			cstm.setInt(1, c.getNum_cate());
-			cstm.setString(2, c.getNom_pro());
-			cstm.setDouble(3, c.getPre_unit_compra());
-			cstm.setDouble(4, c.getPre_unit_venta());
-			cstm.setInt(5, c.getStock_min());
-			cstm.setInt(6, c.getStock_max());
-			cstm.setInt(7, c.getCod_marca());
-			cstm.setString(8, c.getPres());
-			cstm.setInt(9, c.getM_control());
+			cstm.setInt(1, c.getCod_prov());
+			cstm.setInt(2, c.getCod_emp());
+			cstm.setString(3, c.getFecha_em());
+			cstm.setString(4, c.getMetodo_pago());
+			
+			//Ejecutamos el callablestatement
+			r=cstm.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(cone!=null) cone.close();
+				if(cstm!=null) cstm.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return r;
+	}
+
+	@Override
+	public int modificarFacturaProveedor(FacturaProveedor c) {
+		//Declarar una variable para el resultado
+		int r = -1;
+		
+		//Declarar objeto para la conexion
+		Connection cone = null;
+		
+		//Declarar objeto para manipular procedimiento almacenado
+		CallableStatement cstm = null;
+		try {
+			cone = MySqlConexion.miConexion();
+			
+			//Preparar el callableStatement
+			cstm = cone.prepareCall("{call SP_MODIFICAR_FACTURA_PROVEEDOR(?,?,?,?,?)}");
+			
+			//Enviar los datos a cstm obtenidos por la memoria ram
+			cstm.setInt(1, c.getCod_factura());
+			cstm.setInt(2, c.getCod_prov());
+			cstm.setInt(3, c.getCod_emp());
+			cstm.setString(4, c.getFecha_em());
+			cstm.setString(5, c.getMetodo_pago());
 			
 			//Ejecutamos el callablestatement
 			r=cstm.executeUpdate();
@@ -53,12 +87,11 @@ public class ProductoDAO implements IProductoDAO {
 			}
 			
 		}
-		
 		return r;
 	}
 
 	@Override
-	public int modificarProducto(Producto c) {
+	public int eliminarFacturaProveedor(int cod_Factura) {
 		//Declarar una variable para el resultado
 		int r = -1;
 		
@@ -71,19 +104,10 @@ public class ProductoDAO implements IProductoDAO {
 			cone = MySqlConexion.miConexion();
 			
 			//Preparar el callableStatement
-			cstm = cone.prepareCall("{call SP_MODIFICAR_PRODUCTO(?,?,?,?,?,?,?,?,?,?)}");
+			cstm = cone.prepareCall("{call SP_ELIMINAR_FACTURA_PROVEEDOR(?)}");
 			
 			//Enviar los datos a cstm obtenidos por la memoria ram
-			cstm.setInt(1, c.getCod_pro());
-			cstm.setString(2, null);
-			cstm.setString(3, c.getNom_pro());
-			cstm.setDouble(4, c.getPre_unit_compra());
-			cstm.setDouble(5, c.getPre_unit_venta());
-			cstm.setInt(6, c.getStock_min());
-			cstm.setInt(7, c.getStock_max());
-			cstm.setInt(8, c.getCod_marca());
-			cstm.setString(9, c.getPres());
-			cstm.setInt(10, c.getM_control());
+			cstm.setInt(1, cod_Factura);
 			
 			//Ejecutamos el callablestatement
 			r=cstm.executeUpdate();
@@ -97,53 +121,15 @@ public class ProductoDAO implements IProductoDAO {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
 		}
 		
 		return r;
 	}
 
 	@Override
-	public int eliminarProducto(int cod_prod) {
-		//Declarar una variable para el resultado
-		int r = -1;
-		
-		//Declarar objeto para la conexion
-		Connection cone = null;
-		
-		//Declarar objeto para manipular procedimiento almacenado
-		CallableStatement cstm = null;
-		try {
-			cone = MySqlConexion.miConexion();
-			
-			//Preparar el callableStatement
-			cstm = cone.prepareCall("{call SP_ELIMINAR_PRODUCTO(?)}");
-			
-			//Enviar los datos a cstm obtenidos por la memoria ram
-			cstm.setInt(1, cod_prod);
-			
-			//Ejecutamos el callablestatement
-			r=cstm.executeUpdate();
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if(cone!=null) cone.close();
-				if(cstm!=null) cstm.close();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			
-		}
-		
-		return r;
-	}
-
-	@Override
-	public Producto buscarProducto(int cod_prod) {
+	public FacturaProveedor buscarFacturaProveedor(int cod_Factura) {
 		//Declaramos objeto cliente
-		Producto c = new Producto();
+		FacturaProveedor c = new FacturaProveedor();
 		
 		//Declarar objeto para la conexion
 		Connection cone = null;
@@ -157,33 +143,26 @@ public class ProductoDAO implements IProductoDAO {
 			cone = MySqlConexion.miConexion();
 			
 			//Preparar el callableStatement
-			cstm = cone.prepareCall("{call SP_BUSCAR_PRODUCTO(?)}");
+			cstm = cone.prepareCall("{call SP_BUSCAR_FACTURA_PROVEEDOR(?)}");
 			
 			//Enviar los datos a cstm obtenidos por la memoria ram
-			cstm.setInt(1, cod_prod);
+			cstm.setInt(1, cod_Factura);
 			
 			//Ejecutamos el callablestatement
 			rs=cstm.executeQuery();
 			
 			while(rs.next()) {
 				//Llenamos el objeto cliente con los datos
-				c.setCod_pro(rs.getInt(1));
-				c.setNum_cate(rs.getInt(2));
-				c.setNom_pro(rs.getString(3));
-				c.setPre_unit_compra(rs.getDouble(4));
-				c.setPre_unit_venta(rs.getDouble(5));
-				c.setStock_min(rs.getInt(6));
-				c.setStock_max(rs.getInt(7));
-				c.setCod_marca(rs.getInt(8));
-				c.setPres(rs.getString(9));
-				c.setM_control(rs.getInt(10));
+				c.setCod_factura(rs.getInt(1));
+				c.setCod_prov(rs.getInt(2));
+				c.setCod_emp(rs.getInt(3));
+				c.setFecha_em(rs.getString(4));
+				c.setMetodo_pago(rs.getString(5));
 			}
 			
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
-		} catch(Exception e){
-			e.printStackTrace();
-		}finally {
+		} finally {
 			try {
 				if(cone!=null) cone.close();
 				if(cstm!=null) cstm.close();
@@ -197,9 +176,9 @@ public class ProductoDAO implements IProductoDAO {
 	}
 
 	@Override
-	public ArrayList<Producto> listadoProducto() {
+	public ArrayList<FacturaProveedor> listadoFacturaProveedor() {
 		//Declaramos la lista de los clientes
-		ArrayList<Producto> data = new ArrayList<Producto>();
+		ArrayList<FacturaProveedor> data = new ArrayList<FacturaProveedor>();
 		
 		//Declarar objeto para la conexion
 		Connection cone = null;
@@ -214,24 +193,19 @@ public class ProductoDAO implements IProductoDAO {
 			cone = MySqlConexion.miConexion();
 			
 			//Preparar el callableStatement
-			cstm = cone.prepareCall("{call SP_LISTAR_PRODUCTO()}");
+			cstm = cone.prepareCall("{call SP_LISTAR_FACTURA_PROVEEDOR()}");
 			
 			//Ejecutamos el callablestatement, enviar lo que tiene cstm a rs
 			rs=cstm.executeQuery();
 			
 			//Llenamos la lista con los clientes de la base de datos
 			while(rs.next()) {
-				Producto c = new Producto();
-				c.setCod_pro(rs.getInt(1));
-				c.setNum_cate(rs.getInt(2));
-				c.setNom_pro(rs.getString(3));
-				c.setPre_unit_compra(rs.getDouble(4));
-				c.setPre_unit_venta(rs.getDouble(5));
-				c.setStock_min(rs.getInt(6));
-				c.setStock_max(rs.getInt(7));
-				c.setCod_marca(rs.getInt(8));
-				c.setPres(rs.getString(9));
-				c.setM_control(rs.getInt(10));
+				FacturaProveedor c = new FacturaProveedor();
+				c.setCod_factura(rs.getInt(1));
+				c.setCod_prov(rs.getInt(2));
+				c.setCod_emp(rs.getInt(3));
+				c.setFecha_em(rs.getString(4));
+				c.setMetodo_pago(rs.getString(5));
 				
 				data.add(c);
 			}
