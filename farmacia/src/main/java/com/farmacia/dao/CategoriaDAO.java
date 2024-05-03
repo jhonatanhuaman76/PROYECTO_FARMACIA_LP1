@@ -33,6 +33,8 @@ public class CategoriaDAO implements ICategoriaDAO {
 			//Ejecutamos el callablestatement
 			r=cstm.executeUpdate();
 			
+		
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
