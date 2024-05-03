@@ -19,8 +19,8 @@
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
             <li><a class="dropdown-item" href="${pageContext.servletContext.contextPath}/Clientes.jsp">Clientes</a></li>
             <li><a class="dropdown-item" href="#">Medicamentos</a></li>
-            <li><a class="dropdown-item" href="#">Proveedores</a></li>
-            <li><a class="dropdown-item" href="#">Trabajadores</a></li>
+            <li><a class="dropdown-item" href="${pageContext.servletContext.contextPath}/Proveedor.jsp">Proveedores</a></li>
+            <li><a class="dropdown-item" href="${pageContext.servletContext.contextPath}/empleado.jsp">Trabajadores</a></li>
             <li><a class="dropdown-item" href="#">Categorias</a></li>
           </ul>
         </li>

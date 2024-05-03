@@ -20,9 +20,10 @@ APELLIDO_EMPLEADO	VARCHAR(40) NOT NULL,
 TELF_EMPLEADO		CHAR(9) NOT NULL,
 CORREO_EMPLEADO		VARCHAR(40) NOT NULL,
 DIRE_EMPLEADO		VARCHAR(40) NOT NULL,
-TIPO_USUARIO		CHAR(1) NOT NULL,
+TIPO_USUARIO		CHAR(20) NOT NULL,
 NOMBRE_USUARIO		VARCHAR(20) NOT NULL UNIQUE,
 PAS_USUARIO		VARCHAR(20) NOT NULL,
+CHECK(TIPO_USUARIO IN ('EMPLEADO', 'ADMIN', 'SUPERADMIN')),
 PRIMARY KEY (COD_EMPLEADO) 
 );
 
@@ -226,7 +227,7 @@ APE_EMPL        VARCHAR(40),
 TELEF_EMPL      CHAR(9),
 CORREO_EMPL     VARCHAR(40),
 DIRE_EMPL       VARCHAR(40),
-TIPO_USER       CHAR(1),
+TIPO_USER       VARCHAR(20),
 NOM_USER        VARCHAR(20),
 PASS_USER       VARCHAR(20)
 )
@@ -240,7 +241,7 @@ APE_EMPL        VARCHAR(40),
 TELEF_EMPL      CHAR(9),
 CORREO_EMPL     VARCHAR(40),
 DIRE_EMPL       VARCHAR(40),
-TIPO_USER       CHAR(1),
+TIPO_USER       VARCHAR(20),
 NOM_USER        VARCHAR(20),
 PASS_USER       VARCHAR(20)
 )
@@ -699,7 +700,10 @@ call SP_REGISTRAR_CLIENTE("00000000", "PUBLICO", "GENERAL");
 call SP_REGISTRAR_CLIENTE("95136248", "ADRIEL", "PINTADO");
 
 /*INSERTANDO DATOS PARA EMPLEADO -------------------------------------------------------------------------------------*/
-call SP_REGISTRAR_EMPLEADO("63215984", "JHONATAN", "HUAMAN", "963258471", "JHONATAN@gmail.com", "Mateo Silva MzB ltD, San Luis", "a", "jhonatan123", "123");
+call SP_REGISTRAR_EMPLEADO("63215984", "JHONATAN", "HUAMAN", "963258471", "JHONATAN@gmail.com", "Mateo Silva MzB ltD, San Luis", "SUPERADMIN", "jhonatan123", "123");
+
+/*INSERTANDO DATOS PARA PROVEEDOR -------------------------------------------------------------------------------------*/
+call SP_REGISTRAR_PROVEEDOR("12345678942", "JUAN PEREZ", "745896321", "Mz D lt 11 B Libertad", "JUANPEREZ@gmail.com", "https://juanperez.com");
 
 /*INSERTANDO DATOS PARA MARCA -------------------------------------------------------------------------------------*/
 call SP_REGISTRAR_MARCA("Bayer");

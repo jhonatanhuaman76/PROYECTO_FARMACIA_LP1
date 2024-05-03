@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import java.util.ArrayList;
 import com.farmacia.entidad.Empleado;
 import com.farmacia.dao.EmpleadoDAO;
 
@@ -16,76 +15,87 @@ public class ServletEmpleado extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	Empleado objEmpleado=new Empleado();
-	EmpleadoDAO emplDAO=new EmpleadoDAO();
-	int codEmpl;
+	EmpleadoDAO objEmpleadoDAO=new EmpleadoDAO();
+	//int codEmpl;
 
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String accion=request.getParameter("accion");
 		
+		String cod = request.getParameter("codigo");
+		String dni = request.getParameter("dni");
+		String nombre = request.getParameter("nombre");
+		String apellido = request.getParameter("apellido");
+		String telef = request.getParameter("telefono");
+		String correo = request.getParameter("correo");
+		String dire = request.getParameter("direccion");
+		String tipoUser = request.getParameter("tipoUsuario");
+		String nomUser = request.getParameter("nombreUsuario");
+		String pasUser = request.getParameter("password");
+		
+		String title = "Oops...", 
+				text = "Algo fall�", 
+				icon = "error";
+		
 		try {
 			switch(accion) {
-			case "Listar":
-				ArrayList<Empleado>lista=emplDAO.listadoEmpleado();
-				request.setAttribute("lista_empleados", lista);
-				request.getRequestDispatcher("empleado.jsp").forward(request, response);
-				break;
 			case "Agregar":
-				String dni=request.getParameter("txtDNI");
-				String nombre=request.getParameter("txtNombre");
-				String apellido=request.getParameter("txtApellido");
-				String telef=request.getParameter("txtTelef");
-				String correo=request.getParameter("txtCorreo");
-				String dire=request.getParameter("txtDireccion");
-				//no lee la base de datos lo q se ingresa en tipo, falta averiguar
-				String tipo=String.valueOf(request.getParameter("txtTipo"));
-				String user=request.getParameter("txtUser");
-				String pass=request.getParameter("txtPassword");
-				
 				objEmpleado.setDni_emp(dni);
 				objEmpleado.setNom_emp(nombre);
 				objEmpleado.setApe_emp(apellido);
 				objEmpleado.setTelf_emp(telef);
 				objEmpleado.setCorreo_emp(correo);
 				objEmpleado.setDire_emp(dire);
-				objEmpleado.setTipo_usu(tipo);
-				objEmpleado.setNom_usu(user);
-				objEmpleado.setPas_usu(pass);
+				objEmpleado.setTipo_usu(tipoUser);
+				objEmpleado.setNom_usu(nomUser);
+				objEmpleado.setPas_usu(pasUser);
 				
-				emplDAO.registrarEmpleado(objEmpleado);
-				request.getRequestDispatcher("gestionEmpleado?accion=Listar").forward(request, response);
-				break;
-			case "Editar":
-				codEmpl=Integer.parseInt(request.getParameter("id"));
-				objEmpleado=emplDAO.buscarEmpleado(codEmpl);
-				request.setAttribute("miEmpleado", objEmpleado);
-				request.getRequestDispatcher("gestionEmpleado?accion=Listar").forward(request, response);
+				int result = objEmpleadoDAO.registrarEmpleado(objEmpleado);
+				
+				if(result!=-1) {
+					title = "¡Empleado  guardado!";
+					text = "El empleado se ha registrado correctamente";
+					icon = "success";					
+				}else {
+					title = "Oops...";
+					text = "No se pudo registrar el empleado";
+					icon = "error";					
+				}
 				break;
 			case "Actualizar":
-				String dni1=request.getParameter("txtDNI");
-				String nombre1=request.getParameter("txtNombre");
-				String apellido1=request.getParameter("txtApellido");
-				String telef1=request.getParameter("txtTelef");
-				String correo1=request.getParameter("txtCorreo");
-				String dire1=request.getParameter("txtDireccion");
-				//no lee la base de datos lo q se ingresa en tipo, falta averiguar
-				String tipo1=String.valueOf(request.getParameter("txtTipo"));
-				String user1=request.getParameter("txtUser");
-				String pass1=request.getParameter("txtPassword");
+				objEmpleado.setCod_emp(Integer.parseInt(cod));
+				objEmpleado.setDni_emp(dni);
+				objEmpleado.setNom_emp(nombre);
+				objEmpleado.setApe_emp(apellido);
+				objEmpleado.setTelf_emp(telef);
+				objEmpleado.setCorreo_emp(correo);
+				objEmpleado.setDire_emp(dire);
+				objEmpleado.setTipo_usu(tipoUser);
+				objEmpleado.setNom_usu(nomUser);
+				objEmpleado.setPas_usu(pasUser);
 				
-				objEmpleado.setCod_emp(codEmpl);
-				objEmpleado.setDni_emp(dni1);
-				objEmpleado.setNom_emp(nombre1);
-				objEmpleado.setApe_emp(apellido1);
-				objEmpleado.setTelf_emp(telef1);
-				objEmpleado.setCorreo_emp(correo1);
-				objEmpleado.setDire_emp(dire1);
-				objEmpleado.setTipo_usu(tipo1);
-				objEmpleado.setNom_usu(user1);
-				objEmpleado.setPas_usu(pass1);
+				int res = objEmpleadoDAO.modificarEmpleado(objEmpleado);
+				if(res!=-1) {
+					title = "¡Empleado  actualizado!";
+					text = "El empleado se ha editado correctamente";
+					icon = "success";					
+				}else {
+					title = "Oops...";
+					text = "No se pudo editar el empleado";
+					icon = "error";					
+				}
+				break;
+			case "Eliminar":
+				int r = objEmpleadoDAO.eliminarEmpleado(Integer.parseInt(cod));
 				
-				emplDAO.modificarEmpleado(objEmpleado);
-				request.getRequestDispatcher("gestionEmpleado?accion=Listar").forward(request, response);
-				
+				if(r!=-1) {
+					title = "¡Empleado  eliminado!";
+					text = "El empleado se ha eliminado correctamente";
+					icon = "info";					
+				}else {
+					title = "Oops...";
+					text = "No se pudo eliminar el empleado. Ya ha sido registrado en una venta";
+					icon = "error";
+				}
 				break;
 			default:
 				throw new AssertionError();
@@ -93,6 +103,12 @@ public class ServletEmpleado extends HttpServlet {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		request.getSession().setAttribute("title", title);
+		request.getSession().setAttribute("text", text);
+		request.getSession().setAttribute("icon", icon);
+		
+		response.sendRedirect("Empleado.jsp");
 	}
 
 }
