@@ -52,9 +52,10 @@
     background-color: white;
   }
   
-	.bootstrap-select .dropdown-toggle:focus, .bootstrap-select>select.mobile-device:focus+.dropdown-toggle{
-	    outline: none!important;
-	}
+  
+.bootstrap-select .dropdown-toggle:focus, .bootstrap-select>select.mobile-device:focus+.dropdown-toggle{
+    outline: none!important;
+}
 </style>
 </head>
 <body>
@@ -66,11 +67,11 @@
 		<form class="mt-4" action="gestionVentas" role="form" method="post" id="frmVentas">
 			<h1>Punto de Venta FarmaPlus</h1>
 	    <div class="mt-4 row">
-	    	<div class="col-md-10 form-group">
+	    	<div class="col-md-10 form-group ns">
 	    		<label for="txtCliente" class="form-label">Cliente</label><button type="button" class="btn text-primary fw-bold border-0" data-bs-toggle="button">[+ Nuevo]</button>
 		      <select class="selectpicker w-100" name="cliente" data-placeholder="Elije un cliente" data-live-search="true" id="txtCliente">
 					  <c:forEach var="cli" items="${pageScope.lista_cli}">
-					  	<option value="${cli.getCod_cli()}">${cli.getNom_cli()} ${ cli.getApe_cli()}</option>
+					  	<option value="${cli.getCod_cli()}">${cli.getNom_cli()} ${ cli.getApe_cli()} -- DNI: ${cli.getDni_cli()}</option>
 					  </c:forEach>
 					</select>
 	    	</div>
@@ -94,8 +95,7 @@
 					  	data-precio="${lote.getPre_unit_venta()}"
 					  	data-stock="${lote.getStock()}"
 					  	>
-					  		${lote.getNom_pro()}
-					  		 -- Fecha Venc: ${lote.getFecha_venc()}
+					  		#${lote.getNro_lote()} -- ${lote.getNom_pro()} -- Fecha Venc: ${lote.getFecha_venc()}
 					  	</option>
 					  </c:forEach>
 					</select>
@@ -112,7 +112,7 @@
 	    <div class="mt-4 row g-3">
 	    	<div class="col-md-5  form-group">
 			    <label for="txtCantidad" class="form-label">Cantidad</label>
-			    <input type="number" min="0" class="form-control ns" id="txtCantidad">
+			    <input type="number" min="0" class="form-control" id="txtCantidad">
 			  </div>
 			  <div class="col-md-5 form-group">
 			  	<label for="cboUnidadMedida" class="form-label">Unidad de Medida</label>
@@ -189,7 +189,7 @@
 						$('#cboUnidadMedida').append(
 								$('<option>')
 								.attr('value', e.cod_uni)
-								.text(e.abtr_uni+" ("+e.des_uni+")"+" -- Factor: "+e.factor)
+								.text(e.abtr_uni+" ("+e.des_uni+")"+" -- Contiene: "+e.factor+" und")
 								.data('abtr', e.abtr_uni)
 								.data('factor', e.factor)
 						);
@@ -204,9 +204,9 @@
 			});
 		}
 	
-    function validarIngresoProductoEnTabla(nroLote, codUnidad, cantidad){
+    function validarIngresoProductoEnTabla(nroLote, codUnidad, cantidad, stock, factor){
     	const isValidNroLote = validarNroLote(nroLote);
-      const isValidCantidad = validarCantidad(cantidad);
+      const isValidCantidad = validarCantidad(cantidad, stock, factor);
       const isValidUnidad = validarUnidad(codUnidad);
     	
       if(isValidNroLote && isValidCantidad && isValidUnidad){
@@ -238,24 +238,30 @@
     	return isValid;
     }
     
-    function validarCantidad(cantidad){
+    function validarCantidad(cantidad, stock, factor){
     	let isValid = true;
-    	const divCantidad = $('#txtCantidad').closest('.form-group');
-    	
-    	if(isNaN(cantidad) || cantidad <= 0){
-    		divCantidad.removeClass('has-success');
-    		divCantidad.removeClass('has-error').find("small").remove();
-    		divCantidad.addClass('has-error').append($('<small>').addClass('help-block').text('Ingrese una cantidad valida'));
-    		isValid = false;
-    	}else{
-    		divCantidad.removeClass('has-error').find("small").remove();
-    		divCantidad.addClass('has-success');
-    	}
+     	const divCantidad = $('#txtCantidad').closest('.form-group');
+     	
+     	if(isNaN(cantidad) || cantidad <= 0){
+     		divCantidad.removeClass('has-success');
+     		divCantidad.removeClass('has-error').find("small").remove();
+     		divCantidad.addClass('has-error').append($('<small>').addClass('help-block').text('Ingrese una cantidad valida'));
+     		isValid = false;
+     	}else if(cantidad*factor>stock){
+     		divCantidad.removeClass('has-success');
+     		divCantidad.removeClass('has-error').find("small").remove();
+     		divCantidad.addClass('has-error').append($('<small>').addClass('help-block').text('La cantidad es mayor al stock'));
+     		isValid = false;
+     	}else{
+     		divCantidad.removeClass('has-error');
+     		divCantidad.removeClass('has-error').find("small").remove();
+     		divCantidad.addClass('has-success');
+     	}
     	
     	return isValid;
     }
     
-    function validarCantidadTabla(cantidad, div){
+    function validarCantidadTabla(cantidad, div, factor, stock){
     	let isValid = true;
     	
     	if(isNaN(cantidad) || cantidad <= 0){
@@ -263,7 +269,13 @@
     		div.removeClass('has-error').find("small").remove();
     		div.addClass('has-error').append($('<small>').addClass('help-block').text('Ingrese una cantidad valida'));
     		isValid = false;
-    	}else{
+    	}else if(cantidad*factor>stock){
+     		div.removeClass('has-success');
+     		div.removeClass('has-error').find("small").remove();
+     		div.addClass('has-error').append($('<small>').addClass('help-block').text('La cantidad es mayor al stock'));
+     		isValid = false;
+     	}else{
+     		div.removeClass('has-error');
     		div.removeClass('has-error').find("small").remove();
     		div.addClass('has-success');
     	}
@@ -318,7 +330,7 @@
     	$('#txtTotal').val((total).toFixed(2));
     }
     
-    function anadirNuevoDetalle(nroLote, nombreProducto, abtrUnidad, codUnidad, cantidad, factorUnidad, precio){
+    function anadirNuevoDetalle(nroLote, nombreProducto, abtrUnidad, codUnidad, cantidad, factorUnidad, precio, stock){
     	// Crear un nueva fila
 			var nuevaFila = $('<tr>');
 			
@@ -340,6 +352,7 @@
 			cantidadTd.append($('<input>').addClass('form-control border-0 cantidadPres').attr('type', 'number').attr('name', 'cantidadPres[]').val(cantidad).prop('readonly', true));
 			cantidadTd.append($('<input>').addClass('form-control border-0 cantidadBase').attr('type', 'hidden').attr('name', 'cantidadBase[]').val(cantidad*factorUnidad).prop('readonly', true));
 			cantidadTd.append($('<input>').addClass('form-control border-0 factor').attr('type', 'hidden').attr('name', 'factor').val(factorUnidad).prop('readonly', true));
+			cantidadTd.append($('<input>').addClass('form-control border-0 stock').attr('type', 'hidden').attr('name', 'stock').val(stock).prop('readonly', true));
 			nuevaFila.append(cantidadTd);
 			
 			// Añadir la celda de precio a la fila
@@ -416,10 +429,11 @@
 					let cantidadesValidas = true;
 			    $('#mydatatable tbody tr').each(function() {
 			        const cantidad = $(this).find('.cantidadPres').val();
+			        const factor = $(this).find('.factor').val();
+			        const stock = $(this).find('.stock').val();
 			        
-			        if (isNaN(cantidad) || cantidad <= 0) {
+			        if (isNaN(cantidad) || cantidad <= 0 || factor*cantidad>stock) {
 			            cantidadesValidas = false;
-			            console.log(cantidad);
 			            return false;
 			        }
 			    });			
@@ -451,6 +465,7 @@
         const cantidadPresInput = $(this).closest('tr').find('.cantidad input.cantidadPres');
         const cantidadBaseInput = $(this).closest('tr').find('.cantidad input.cantidadBase');
         const factor = $(this).closest('tr').find('.cantidad input.factor').val();
+        const stock = $(this).closest('tr').find('.cantidad input.stock').val();
         cantidadPresInput.prop('readonly', false).focus();
 
       	// Actualizar el importe al modificar la cantidad
@@ -465,7 +480,7 @@
 		        cantidadBaseInput.val(cantidadPresInput.val()*factor);
 		        actualizarTotales();
 		        
-		        const isValid = validarCantidadTabla(cantidad, $(this).closest('tr').find('.cantidad'));
+		        const isValid = validarCantidadTabla(cantidad, $(this).closest('tr').find('.cantidad'), factor, stock);
 		        
 		        if(!isValid){
 		        	 $(this).focus();
@@ -483,7 +498,7 @@
       	// Volver a desactivar campo cantidad al perder foco
         cantidadPresInput.blur(function(){
         	let cantidad = $(this).val();
-        	const isValid = validarCantidadTabla(cantidad, $(this).closest('tr').find('.cantidad'));
+        	const isValid = validarCantidadTabla(cantidad, $(this).closest('tr').find('.cantidad'),factor, stock);
         	if(!isValid){
 	        	 $(this).focus();
 	        	 return;
@@ -505,8 +520,10 @@
     	let valor =$(this).val();
     	
     	$(this).val(valor.replace(/\D/g, ''));
+    	const factorUnidad = $('#cboUnidadMedida option:selected').data('factor');
+    	const stock = $('#cboLote option:selected').data('stock');
     	
-    	validarCantidad(valor);
+    	validarCantidad(valor, stock, factorUnidad);
     });
     
     // Agregar producto al detalle de venta
@@ -519,9 +536,10 @@
     	const codUnidad = $('#cboUnidadMedida').val();
     	const abtrUnidad = $('#cboUnidadMedida option:selected').data('abtr');
     	const factorUnidad = $('#cboUnidadMedida option:selected').data('factor');
+    	const stock = $('#cboLote option:selected').data('stock');
     	
-    	if(validarIngresoProductoEnTabla(nroLote, codUnidad, cantidad)){
-    		anadirNuevoDetalle(nroLote, nombreProducto, abtrUnidad, codUnidad, cantidad, factorUnidad, precio);
+    	if(validarIngresoProductoEnTabla(nroLote, codUnidad, cantidad, stock, factorUnidad)){
+    		anadirNuevoDetalle(nroLote, nombreProducto, abtrUnidad, codUnidad, cantidad, factorUnidad, precio, stock);
     		actualizarTotales();
     	}
 

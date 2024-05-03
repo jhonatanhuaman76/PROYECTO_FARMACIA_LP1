@@ -22,29 +22,57 @@ public class ServletLote extends HttpServlet {
 	 * @see HttpServlet#service(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String title = "Oops...";
-		String text = "No se pudo registrar el lote";
-		String icon = "error";
+		
+		String accion = request.getParameter("accion");
+		String codPro = request.getParameter("producto");
+		String stock = request.getParameter("stock");
+		String fechaVenc = request.getParameter("fecha_venc");
+		String fechaFab = request.getParameter("fecha_fab");
+		String condTran = request.getParameter("cond_tran");
+		String codLote = request.getParameter("cod");
+		
+		String title = "Oops...", 
+				text = "Algo falló", 
+				icon = "error";
 		
 		try {
-			int codPro = Integer.parseInt(request.getParameter("producto"));
-			int stock = Integer.parseInt(request.getParameter("stock"));
-			String fechaVenc = request.getParameter("fecha_venc");
-			String fechaFab = request.getParameter("fecha_fab");
-			String condTran = request.getParameter("cond_tran");
+			switch(accion) {
+			case "Agregar":
+				Lote d = new Lote();
+				d.setCod_pro(Integer.parseInt(codPro));
+				d.setStock(Integer.parseInt(stock));
+				d.setFecha_venc(fechaVenc);
+				d.setFecha_fab(fechaFab);
+				d.setCond_trans(condTran);
+				
+				int result = loteDAO.registrarLote(d);
+				
+				if(result!=-1) {
+					title = "¡Lote guardado!";
+					text = "El lote se ha registrado correctamente";
+					icon = "success";					
+				}else {
+					title = "Oops...";
+					text = "No se pudo registrar el lote";
+					icon = "error";					
+				}
+				break;
+			case "Eliminar":
+				int res = loteDAO.eliminarLote(Integer.parseInt(codLote));
+				
+				if(res!=-1) {
+					title = "¡Lote eliminado!";
+					text = "El lote se ha eliminado correctamente";
+					icon = "info";
+				}else {
+					title = "Oops...";
+					text = "No es posible eliminar el lote. Ya ha sido registrado en una venta o compra";
+					icon = "error";
+				}
+				break;
+			default:
+			}
 			
-			Lote d = new Lote();
-			d.setCod_pro(codPro);
-			d.setStock(stock);
-			d.setFecha_venc(fechaVenc);
-			d.setFecha_fab(fechaFab);
-			d.setCond_trans(condTran);
-			
-			loteDAO.registrarLote(d);
-			
-			title = "¡Lote guardado!";
-			text = "El lote se ha registrado correctamente";
-			icon = "success";
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

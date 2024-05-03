@@ -235,5 +235,4 @@ public class LoteDAO implements ILoteDAO {
 		
 		return data;
 	}
-
 }

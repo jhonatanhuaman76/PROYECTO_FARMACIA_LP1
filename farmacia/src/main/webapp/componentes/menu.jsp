@@ -6,7 +6,7 @@
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
-    <a class="navbar-brand" href="${pageContext.servletContext.contextPath}/inicio.jsp">Farma Plus</a>
+    <a class="navbar-brand" href="${pageContext.servletContext.contextPath}/Inicio.jsp">Farma Plus</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -17,7 +17,7 @@
             Mantenimiento
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="#">Clientes</a></li>
+            <li><a class="dropdown-item" href="${pageContext.servletContext.contextPath}/Clientes.jsp">Clientes</a></li>
             <li><a class="dropdown-item" href="#">Medicamentos</a></li>
             <li><a class="dropdown-item" href="#">Proveedores</a></li>
             <li><a class="dropdown-item" href="#">Trabajadores</a></li>
@@ -25,13 +25,13 @@
           </ul>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Ventas</a>
+          <a class="nav-link" href="${pageContext.servletContext.contextPath}/Vender.jsp">Ventas</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="${pageContext.servletContext.contextPath}/Inventario.jsp">Inventario</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Reportes</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Configuracion</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Ayuda</a>

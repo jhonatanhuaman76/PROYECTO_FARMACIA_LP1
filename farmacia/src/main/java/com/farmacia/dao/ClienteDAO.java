@@ -2,6 +2,7 @@ package com.farmacia.dao;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.CallableStatement;
 import java.util.ArrayList;
 
@@ -13,7 +14,7 @@ import com.farmacia.util.MySqlConexion;
 public class ClienteDAO implements IClienteDAO{
 
 	@Override
-	public int registrarCliente(Cliente c) {
+	public int registrarCliente(Cliente c){
 		//DECLARAR VARIABLE PARA EL RESULTADO
 		int r=-1;
 		
@@ -28,7 +29,7 @@ public class ClienteDAO implements IClienteDAO{
 			cone=MySqlConexion.miConexion();
 			
 			//PASO 02 - PREPARAR CALLABLESTATEMENT
-			cstm=cone.prepareCall("{CALL SP_REGISTRAR_CLIENTE(null, ?, ?, ?)}");
+			cstm=cone.prepareCall("{CALL SP_REGISTRAR_CLIENTE(?, ?, ?)}");
 			
 			//PASO 03 - ENVIAR LOS DATOS A CSTM OBTENIDO DE LA MEMORIA RAM
 			cstm.setString(1, c.getDni_cli());
