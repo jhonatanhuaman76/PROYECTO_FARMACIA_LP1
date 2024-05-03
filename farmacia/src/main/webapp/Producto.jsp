@@ -48,43 +48,43 @@
                             <form id="frmCliente">
                                 <div class="mb-3">
                                     <label for="codigo" class="form-label">Codigo</label>
-                                    <input type="text" class="form-control" id="codigo" name="codigo" readonly value="0">
+                                    <input type="text" class="form-control" id="codigo" name="txtcodigo" readonly value="0">
                                 </div>
                                 <div class="mb-3">
                                     <label for="dni" class="form-label">Numero de Categoria</label>
-                                    <input type="text" class="form-control" id="cat" name="cat" readonly value="0">
+                                    <input type="text" class="form-control" id="cat" name="txtcategoria" readonly value="0">
                                 </div>
                                 <div class="mb-3">
                                     <label for="nombre" class="form-label">Producto </label>
-                                    <input type="text" class="form-control" id="pro" name="pro" placeholder="Ingrese producto">
+                                    <input type="text" class="form-control" id="pro" name="txtpro" placeholder="Ingrese producto">
                                 </div>
                                 <div class="mb-3">
                                     <label for="apellido" class="form-label">Precio unitario de compra</label>
-                                    <input type="text" class="form-control" id="PUC" name="PUC" placeholder="Ingrese Precio unitario de compra">
+                                    <input type="text" class="form-control" id="PUC" name="txtPUC" placeholder="Ingrese Precio unitario de compra">
                                 </div>
                                   <div class="mb-3">
                                     <label for="nombre" class="form-label">Precio unitario de venta</label>
-                                    <input type="text" class="form-control" id="PUV" name="PUV" placeholder="Ingrese Precio unitario de venta">
+                                    <input type="text" class="form-control" id="PUV" name="txtPUV" placeholder="Ingrese Precio unitario de venta">
                                 </div>
                                   <div class="mb-3">
                                     <label for="nombre" class="form-label">Stock Mínimo</label>
-                                    <input type="text" class="form-control" id="SM" name="SM" placeholder="Ingrese Stock mínimo">
+                                    <input type="text" class="form-control" id="SM" name="txtSMin" placeholder="Ingrese Stock mínimo">
                                 </div>
                                   <div class="mb-3">
                                     <label for="nombre" class="form-label">Stock Máximo</label>
-                                    <input type="text" class="form-control" id="SM" name="SM" placeholder="Ingrese Stock Máximo">
+                                    <input type="text" class="form-control" id="SM" name="txtSMax" placeholder="Ingrese Stock Máximo">
                                 </div>
                                    <div class="mb-3">
                                     <label for="codigo" class="form-label">Codigo Marca</label>
-                                    <input type="text" class="form-control" id="codigoM" name="codigoM" readonly value="0">
+                                    <input type="text" class="form-control" id="codigoM" name="txtcodigoM" readonly value="0">
                                 </div>
               					<div class="mb-3">
                                     <label for="nombre" class="form-label">Presentación</label>
-                                    <input type="text" class="form-control" id="presentacion" name="presentacion" placeholder="Ingrese presentación">
+                                    <input type="text" class="form-control" id="presentacion" name="txtpresentacion" placeholder="Ingrese presentación">
                                 </div>
                               	<div class="mb-3">
                                     <label for="nombre" class="form-label">M_Controlado</label>
-                                    <input type="text" class="form-control" id="MC" name="MC" placeholder="Ingrese Controlado">
+                                    <input type="text" class="form-control" id="MC" name="txtMC" placeholder="Ingrese Controlado">
                                 </div>
                                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                     <button type="button" class="btn btn-secondary btn-lg">Guardar</button>
