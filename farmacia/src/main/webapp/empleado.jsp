@@ -195,7 +195,7 @@
 	     			<div class="form-group">
 	      			<label>Confirmar clave</label>
 	      			<input type="text" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Ingrese la confirmación de clave">
-	     			</div>
+	     			</div>	
         	</div>
         	<div class="row">
 	        	<div class="d-grid gap-2 d-md-flex justify-content-md-end">

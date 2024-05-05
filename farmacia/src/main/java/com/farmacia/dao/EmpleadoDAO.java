@@ -229,7 +229,7 @@ public class EmpleadoDAO implements IEmpleadoDAO{
 			}
 
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		}
 		
 		finally {
@@ -239,7 +239,53 @@ public class EmpleadoDAO implements IEmpleadoDAO{
 				if(rs!=null)rs.close();
 				
 			} catch (Exception e2) {
-				// TODO: handle exception
+				e2.printStackTrace();
+			}
+		}
+		
+		return listame;
+	}
+
+	@Override
+	public ArrayList<Empleado> reporteGeneralEmpleado() {
+		Connection cone=null;
+		CallableStatement cstm=null;
+		ResultSet rs=null;
+		ArrayList<Empleado>listame=new ArrayList<Empleado>();
+		
+		try {
+			//Invocar conexion
+			cone=MySqlConexion.miConexion();
+			//Preparar el cstm
+			cstm=cone.prepareCall("{CALL SP_REPORTE_GENERAL_VENDEDORES()}");
+			//Enviar lo q tiene cstm a rs
+			rs=cstm.executeQuery();
+			//Haciendo el recorrido
+			while(rs.next()) {
+				//Declarar un objeto basado a cliente
+				Empleado emp=new Empleado();
+				emp.setCod_emp(rs.getInt(1));
+				emp.setDni_emp(rs.getString(2));
+				emp.setNom_emp(rs.getString(3));
+				emp.setApe_emp(rs.getString(4));
+				emp.setTelf_emp(rs.getString(5));
+				emp.setTotal_ventas(rs.getInt(6));
+				//Enviando cli a listame
+				listame.add(emp);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		finally {
+			try {
+				if(cone!=null)cone.close();
+				if(cstm!=null)cstm.close();
+				if(rs!=null)rs.close();
+				
+			} catch (Exception e2) {
+				e2.printStackTrace();
 			}
 		}
 		

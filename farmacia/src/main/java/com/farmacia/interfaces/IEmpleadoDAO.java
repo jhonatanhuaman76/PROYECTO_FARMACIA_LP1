@@ -13,4 +13,6 @@ ArrayList<Empleado> listadoEmpleado();
 
 Empleado acceder(String user, String clav);
 Empleado recuperarClave(String nom, String ape, String correo, String user);
+
+ArrayList<Empleado> reporteGeneralEmpleado();
 }
