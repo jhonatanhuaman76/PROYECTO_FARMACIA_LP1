@@ -292,4 +292,78 @@ public class EmpleadoDAO implements IEmpleadoDAO{
 		return listame;
 	}
 
+	@Override
+	public Empleado acceder(String user, String clav) {
+		
+		Connection cone=null;
+		CallableStatement cstm=null;
+		ResultSet rs=null;
+		Empleado emplUser=new Empleado();
+		
+		try {
+			cone=MySqlConexion.miConexion();
+			cstm=cone.prepareCall("{CALL SP_ACCESO_EMPLEADO(?, ?)}");
+			cstm.setString(1, user);
+			cstm.setString(2, clav);
+			rs=cstm.executeQuery();
+			while(rs.next()) {
+				emplUser.setCorreo_emp(rs.getString(6));
+				emplUser.setNom_usu(rs.getString(9));
+				emplUser.setPas_usu(rs.getString(10));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+			try {
+				if(cone!=null) cone.close();
+				if(cstm!=null) cstm.close(); //PROECEDIMIENTOS ALMACENADOS
+				if(rs!=null) rs.close(); //PARA REGISTROS
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		
+		return emplUser;
+		
+	}
+
+	@Override
+	public Empleado recuperarClave(String nom, String ape, String correo, String user) {
+		Connection cone=null;
+		CallableStatement cstm=null;
+		ResultSet rs=null;
+		Empleado emplUser=new Empleado();
+		
+		try {
+			cone=MySqlConexion.miConexion();
+			cstm=cone.prepareCall("{CALL SP_RECUPERAR_CLAVE(?, ?, ?, ?)}");
+			cstm.setString(1, nom);
+			cstm.setString(2, ape);
+			cstm.setString(3, correo);
+			cstm.setString(4, user);
+			rs=cstm.executeQuery();
+			while(rs.next()) {
+				emplUser.setNom_emp(rs.getString(3));
+				emplUser.setApe_emp(rs.getString(4));
+				emplUser.setCorreo_emp(rs.getString(6));
+				emplUser.setNom_usu(rs.getString(9));
+				emplUser.setPas_usu(rs.getString(10));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+			try {
+				if(cone!=null) cone.close();
+				if(cstm!=null) cstm.close(); //PROECEDIMIENTOS ALMACENADOS
+				if(rs!=null) rs.close(); //PARA REGISTROS
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		
+		return emplUser;
+	}
+
 }
