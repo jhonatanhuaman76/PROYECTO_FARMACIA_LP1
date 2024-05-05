@@ -106,7 +106,6 @@
 						<td>${pro.getStock_max()}</td>
 						<td>${pro.getPres()}</td>
 						<td>${pro.getM_control()}</td>
-						
 						<td>
 							<button 
 								type="button" 
@@ -141,10 +140,10 @@
       		<input type="hidden" class="form-control" id="codigo" name="codigo">
         	<div class="form-group">
 				<label for="exampleInputPassword1" class="form-label">Categoria</label>
-					<select class="form-select"  name="categoria" id="categoria">
-						<option value=" ">[Seleccione categoria]</option>
-						<c:forEach items="${requestScope.lista_categoria}" var="datos">
-								<option value="${datos.getNum_cate()}">${datos.getNom_cate}</option>
+					<select class="form-select"  name="txtcategoria" id="categoria">
+						<option value="">[Seleccione categoria]</option>
+						<c:forEach items="${lista_categoria}" var="datos">
+								<option value="${datos.getNum_cate()}">${datos.getNom_cate()}</option>
 						</c:forEach>
 					</select>
 			</div>
@@ -283,7 +282,7 @@
 						  message:"El Stock Minimo es obligatorio"
 					  },
 					  regexp:{
-						  regexp:/^[0-9],
+						  regexp:/^[0-9]/,
 						  message:"Ingrese un dato valido"
 					  }
 				  }
@@ -294,7 +293,7 @@
 						  message:"El Stock Maximo es obligatorio"
 					  },
 					  regexp:{
-						  regexp:/^[0-9],
+						  regexp:/^[0-9]/,
 						  message:"Ingrese un dato valido"
 					  }
 				  }
@@ -305,8 +304,8 @@
 						  message:"La presentacion es obligatoria"
 					  },
 					  stringLength:{
-						  message:'Minimo 20 a m·s caracteres',
-						  min:20
+						  message:'Maximo 20 caracteres',
+						  max:20
 					  },
 					  regexp:{
 						  regexp:/^([-a-zA-Z0-9…Õ—”⁄‹·ÈÌÛ˙¸Ò\s])+$/,
@@ -323,9 +322,9 @@
 					  StringLength:{
 						  message:"MaXIMO",
 						  max:1
-					  }
+					  },
 					  regexp:{
-						  regexp:/^[0-9],
+						  regexp:/^[0-9]/,
 						  message:"Ingrese un dato valido"
 					  }
 					  
@@ -335,12 +334,15 @@
 			  
 		  }//fin de fields
 		});
+		
 		$('#mydatatable').DataTable({
 			language: {
 				url: '//cdn.datatables.net/plug-ins/2.0.3/i18n/es-ES.json',
 			},
-			responsive: true
-		  ]
+			responsive: true,
+			columnDefs: [
+			    { responsivePriority: 1, targets: 9 }
+			]
 		});
 		
 		
@@ -354,6 +356,7 @@
 			const stckmax = $(this).parents("tr").find("td")[6].innerHTML;
 			const pre = $(this).parents("tr").find("td")[7].innerHTML;
 			const con = $(this).parents("tr").find("td")[8].innerHTML;
+			console.log('HOLA');
 			
 			
 			$('#codigo').val(cod);
