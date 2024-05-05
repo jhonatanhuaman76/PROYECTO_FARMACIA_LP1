@@ -224,7 +224,10 @@
 					language: {
 						url: '//cdn.datatables.net/plug-ins/2.0.3/i18n/es-ES.json',
 					},
-					responsive: true
+					responsive: true,
+					columnDefs: [
+					    { responsivePriority: 1, targets: 5 }
+					]
 			}
 			
 			let table = $('#mydatatable').DataTable(TABLE_CONFIG);

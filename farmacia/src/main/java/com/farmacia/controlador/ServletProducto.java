@@ -120,9 +120,6 @@ public class ServletProducto extends HttpServlet {
 							icon = "error";
 						}
 						break;
-					
-						
-						
 						
 				default:
 						throw new AssertionError();
