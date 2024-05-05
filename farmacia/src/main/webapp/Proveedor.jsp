@@ -306,9 +306,7 @@
 			},
 			responsive: true,
 			columnDefs: [
-		    { responsivePriority: 1, targets: 4 },
-		    { responsivePriority: 1, targets: 3 },
-		    { responsivePriority: 1, targets: 2 }
+		    { responsivePriority: 1, targets: 7 }
 		  ]
 		});
 		
