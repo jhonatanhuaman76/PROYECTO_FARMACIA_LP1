@@ -237,4 +237,61 @@ public class DetalleBoletaDAO implements IDetalleBoletaDAO {
 		return data;
 	}
 
+	@Override
+	public ArrayList<DetalleBoleta> listarDetalleBoletaXCodigoBoleta(int cod_boleta) {
+		//Declaramos la lista de los clientes
+		ArrayList<DetalleBoleta> data = new ArrayList<DetalleBoleta>();
+		
+		//Declarar objeto para la conexion
+		Connection cone = null;
+		
+		//Declarar objeto para manipular procedimiento almacenado
+		CallableStatement cstm = null;
+		
+		//Declarar objeto ResultSet que tiene el resultado del SELECT, para hacer listado
+		ResultSet rs = null;
+		
+		try {
+			cone = MySqlConexion.miConexion();
+			
+			//Preparar el callableStatement
+			cstm = cone.prepareCall("{call SP_LISTAR_DETALLE_BOLETA_X_CODIGO_BOLETA(?)}");
+			cstm.setInt(1, cod_boleta);
+			
+			//Ejecutamos el callablestatement, enviar lo que tiene cstm a rs
+			rs=cstm.executeQuery();
+			
+			//Llenamos la lista con los clientes de la base de datos
+			while(rs.next()) {
+				DetalleBoleta c = new DetalleBoleta();
+				c.setCod_boleta(rs.getInt(1));
+				c.setCod_lote(rs.getInt(2));
+				c.setCod_prod(rs.getInt(3));
+				c.setCod_uni(rs.getInt(4));
+				c.setCant_vend_base(rs.getInt(5)); 
+				c.setCant_vend_pres(rs.getInt(6)); 
+				c.setPre_unit_venta(rs.getDouble(7));
+				c.setNom_pro(rs.getString(8));
+				c.setAbtr_unidad(rs.getString(9));
+				c.setTotal(rs.getDouble(10));
+				
+				data.add(c);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(cone!=null) cone.close();
+				if(cstm!=null) cstm.close();
+				if(rs!=null) rs.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+		}
+		
+		return data;
+	}
+
 }

@@ -30,11 +30,17 @@
         <li class="nav-item">
           <a class="nav-link" href="${pageContext.servletContext.contextPath}/Inventario.jsp">Inventario</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Reportes</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Ayuda</a>
+         <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Reportes
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="${pageContext.servletContext.contextPath}/ReporteGP.jsp">Reporte General de Productos</a></li>
+            <li><a class="dropdown-item" href="${pageContext.servletContext.contextPath}/ReporteGV.jsp">Reporte General de Empleados</a></li>
+            <li><a class="dropdown-item" href="${pageContext.servletContext.contextPath}/ReporteXP.jsp">Reporte Ventas por Producto</a></li>
+            <li><a class="dropdown-item" href="${pageContext.servletContext.contextPath}/ReporteXV.jsp">Reporte Ventas por Empleado</a></li>
+            <li><a class="dropdown-item" href="${pageContext.servletContext.contextPath}/ReportePrecios.jsp">Estadisticas de precio</a></li>
+          </ul>
         </li>
       </ul>
     </div>

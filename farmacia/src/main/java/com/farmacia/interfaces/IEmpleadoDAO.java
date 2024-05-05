@@ -10,4 +10,5 @@ int modificarEmpleado(Empleado c);
 int eliminarEmpleado(int cod_emp);
 Empleado buscarEmpleado(int cod_emp);
 ArrayList<Empleado> listadoEmpleado();
+ArrayList<Empleado> reporteGeneralEmpleado();
 }
