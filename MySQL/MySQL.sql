@@ -263,6 +263,21 @@ COD_EMPL			INT
 SELECT * FROM EMPLEADO
 WHERE COD_EMPLEADO = COD_EMPL;
 
+CREATE PROCEDURE SP_ACCESO_EMPLEADO
+( in user varchar(20),
+  in  clave varchar(20)
+)
+SELECT * FROM EMPLEADO WHERE NOMBRE_USUARIO=user AND PAS_USUARIO=clave;
+
+CREATE PROCEDURE SP_RECUPERAR_CLAVE
+( in nom varchar(40),
+  in  ape varchar(40),
+  in  correo varchar(40),
+  in user varchar(20)
+)
+SELECT * FROM EMPLEADO WHERE NOMBRE_EMPLEADO=nom AND APELLIDO_EMPLEADO=ape AND CORREO_EMPLEADO=correo AND NOMBRE_USUARIO=user;  
+
+
 /*PROCEDIMIENTOS ALMACENADOS PARA PROVEEDOR---------------------------------------------------------------------------------*/
 CREATE PROCEDURE SP_REGISTRAR_PROVEEDOR(
 RUC_PROV		CHAR(11),
