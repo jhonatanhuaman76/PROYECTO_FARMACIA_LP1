@@ -10,4 +10,6 @@ int modificarProducto(Producto c);
 int eliminarProducto(int cod_pro);
 Producto buscarProducto(int cod_pro);
 ArrayList<Producto> listadoProducto();
+ArrayList<Producto> reporteGeneralProductos();
+ArrayList<Producto> estadisticasPrecio();
 }

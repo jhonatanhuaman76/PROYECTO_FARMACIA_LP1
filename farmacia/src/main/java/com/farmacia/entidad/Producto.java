@@ -1,9 +1,9 @@
 package com.farmacia.entidad;
 
 public class Producto {
-private int cod_pro, num_cate, stock_min, stock_max, cod_marca, m_control;
-private String nom_pro, pres;
-private double pre_unit_compra, pre_unit_venta;
+private int cod_pro, num_cate, stock_min, stock_max, cod_marca, m_control, total_ventas;
+private String nom_pro, pres, nom_cate, nom_mayor, nom_menor;
+private double pre_unit_compra, pre_unit_venta, pvmayor, pvmenor, pvprom;
 
 public Producto() {
 }
@@ -20,6 +20,46 @@ public Producto(int cod_pro, int num_cate, int stock_min, int stock_max, int cod
 	this.pres = pres;
 	this.pre_unit_compra = pre_unit_compra;
 	this.pre_unit_venta = pre_unit_venta;
+}
+
+public String getNom_mayor() {
+	return nom_mayor;
+}
+
+public void setNom_mayor(String nom_mayor) {
+	this.nom_mayor = nom_mayor;
+}
+
+public String getNom_menor() {
+	return nom_menor;
+}
+
+public void setNom_menor(String nom_menor) {
+	this.nom_menor = nom_menor;
+}
+
+public double getPvmayor() {
+	return pvmayor;
+}
+
+public void setPvmayor(double pvmayor) {
+	this.pvmayor = pvmayor;
+}
+
+public double getPvmenor() {
+	return pvmenor;
+}
+
+public void setPvmenor(double pvmenor) {
+	this.pvmenor = pvmenor;
+}
+
+public double getPvprom() {
+	return pvprom;
+}
+
+public void setPvprom(double pvprom) {
+	this.pvprom = pvprom;
 }
 
 public int getCod_pro() {
@@ -100,6 +140,22 @@ public double getPre_unit_venta() {
 
 public void setPre_unit_venta(double pre_unit_venta) {
 	this.pre_unit_venta = pre_unit_venta;
+}
+
+public int getTotal_ventas() {
+	return total_ventas;
+}
+
+public void setTotal_ventas(int total_ventas) {
+	this.total_ventas = total_ventas;
+}
+
+public String getNom_cate() {
+	return nom_cate;
+}
+
+public void setNom_cate(String nom_cate) {
+	this.nom_cate = nom_cate;
 }
 
 }

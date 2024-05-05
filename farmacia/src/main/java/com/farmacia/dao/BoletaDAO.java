@@ -231,4 +231,112 @@ public class BoletaDAO implements IBoletaDAO {
 		
 		return data;
 	}
+
+	@Override
+	public ArrayList<Boleta> reporteXProducto(int cod_pro) {
+		//Declaramos la lista de los clientes
+		ArrayList<Boleta> data = new ArrayList<Boleta>();
+		
+		//Declarar objeto para la conexion
+		Connection cone = null;
+		
+		//Declarar objeto para manipular procedimiento almacenado
+		CallableStatement cstm = null;
+		
+		//Declarar objeto ResultSet que tiene el resultado del SELECT, para hacer listado
+		ResultSet rs = null;
+		
+		try {
+			cone = MySqlConexion.miConexion();
+			
+			//Preparar el callableStatement
+			cstm = cone.prepareCall("{call SP_REPORTE_X_PRODUCTO(?)}");
+			cstm.setInt(1, cod_pro);
+			
+			//Ejecutamos el callablestatement, enviar lo que tiene cstm a rs
+			rs=cstm.executeQuery();
+			
+			//Llenamos la lista con los clientes de la base de datos
+			while(rs.next()) {
+				Boleta c = new Boleta();
+				c.setCod_boleta(rs.getInt(1));
+				c.setNom_cli(rs.getString(2));
+				c.setApe_cli(rs.getString(3));
+				c.setNom_emp(rs.getString(4));
+				c.setApe_emp(rs.getString(5));
+				c.setMetodo_pago(rs.getString(6));
+				c.setFecha_em(rs.getString(7));
+				c.setTotal_venta(rs.getInt(8));
+				
+				data.add(c);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(cone!=null) cone.close();
+				if(cstm!=null) cstm.close();
+				if(rs!=null) rs.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+		}
+		
+		return data;
+	}
+
+	@Override
+	public ArrayList<Boleta> reporteXEmpleado(int cod_emp) {
+		//Declaramos la lista de los clientes
+		ArrayList<Boleta> data = new ArrayList<Boleta>();
+		
+		//Declarar objeto para la conexion
+		Connection cone = null;
+		
+		//Declarar objeto para manipular procedimiento almacenado
+		CallableStatement cstm = null;
+		
+		//Declarar objeto ResultSet que tiene el resultado del SELECT, para hacer listado
+		ResultSet rs = null;
+		
+		try {
+			cone = MySqlConexion.miConexion();
+			
+			//Preparar el callableStatement
+			cstm = cone.prepareCall("{call SP_REPORTE_X_VENDEDOR(?)}");
+			cstm.setInt(1, cod_emp);
+			
+			//Ejecutamos el callablestatement, enviar lo que tiene cstm a rs
+			rs=cstm.executeQuery();
+			
+			//Llenamos la lista con los clientes de la base de datos
+			while(rs.next()) {
+				Boleta c = new Boleta();
+				c.setCod_boleta(rs.getInt(1));
+				c.setNom_cli(rs.getString(2));
+				c.setApe_cli(rs.getString(3));
+				c.setMetodo_pago(rs.getString(4));
+				c.setFecha_em(rs.getString(5));
+				c.setTotal_venta(rs.getInt(6));
+				
+				data.add(c);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(cone!=null) cone.close();
+				if(cstm!=null) cstm.close();
+				if(rs!=null) rs.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+		}
+		
+		return data;
+	}
 }

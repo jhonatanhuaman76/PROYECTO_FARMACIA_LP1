@@ -1,7 +1,15 @@
 package com.farmacia.entidad;
 
 public class Empleado {
-private int cod_emp;
+private int cod_emp, total_ventas;
+public int getTotal_ventas() {
+	return total_ventas;
+}
+
+public void setTotal_ventas(int total_ventas) {
+	this.total_ventas = total_ventas;
+}
+
 private String dni_emp, nom_emp, ape_emp, telf_emp, correo_emp, dire_emp, tipo_usu, nom_usu, pas_usu;
 
 public Empleado() {

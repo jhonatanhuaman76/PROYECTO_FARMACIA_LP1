@@ -10,4 +10,6 @@ int modificarBoleta(Boleta b);
 int eliminarBoleta(int cod_boleta);
 Boleta buscarBoleta(int cod_boleta);
 ArrayList<Boleta> listadoBoleta();
+ArrayList<Boleta> reporteXProducto(int cod_pro);
+ArrayList<Boleta> reporteXEmpleado(int cod_emp);
 }

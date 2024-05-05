@@ -2,7 +2,8 @@ package com.farmacia.entidad;
 
 public class DetalleBoleta {
 private int cod_boleta, cod_lote, cod_prod, cod_uni, cant_vend_base, cant_vend_pres;
-private double pre_unit_venta;
+private double pre_unit_venta, total;
+private String nom_pro, abtr_unidad;
 
 public DetalleBoleta() {
 }
@@ -16,6 +17,30 @@ public DetalleBoleta(int cod_boleta, int cod_lote, int cod_prod, int cod_uni, in
 	this.cant_vend_base = cant_vend_base;
 	this.cant_vend_pres = cant_vend_pres;
 	this.pre_unit_venta = pre_unit_venta;
+}
+
+public double getTotal() {
+	return total;
+}
+
+public void setTotal(double total) {
+	this.total = total;
+}
+
+public String getNom_pro() {
+	return nom_pro;
+}
+
+public void setNom_pro(String nom_pro) {
+	this.nom_pro = nom_pro;
+}
+
+public String getAbtr_unidad() {
+	return abtr_unidad;
+}
+
+public void setAbtr_unidad(String abtr_unidad) {
+	this.abtr_unidad = abtr_unidad;
 }
 
 public int getCod_boleta() {

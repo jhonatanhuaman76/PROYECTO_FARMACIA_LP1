@@ -181,7 +181,7 @@
 			$.post('${pageContext.servletContext.contextPath}/gestionUM',{
 				codProducto: codPro
 				}, function(result){
-					$("#cboUnidadMedida").data('placeholder', 'Elije una unidad de medida');
+					$("#cboUnidadMedida").data('placeholder', null);
 					$("#cboUnidadMedida").empty();
 					const ump = $.parseJSON(result);
 					

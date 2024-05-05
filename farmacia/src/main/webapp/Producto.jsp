@@ -237,8 +237,103 @@
 		        validating: 'glyphicon glyphicon-refresh'
 		  },
 		  fields:{
+			  categoria:{
+				  validators:{
+					  notEmpty:{
+						  message:"Categoria es obligatorio"
+					  }
+				  }
+			  },
+			  txtpro:{
+				  validators:{
+					  notEmpty:{
+						  message:"Producto es obligatorio"
+					  },
+					  regexp: {
+	                        regexp: /^([-a-zA-ZÉÍÑÓÚÜáéíóúüñ\s])+$/,
+	                        message: 'El Producto puede letras mayúsculas, minúsculas con y sin tilde; y espacio'
+	                    }
+				  }
+			  },
+			  txtPUC:{
+				  validators:{
+					  notEmpty:{
+						  message:"Precio Unitario de Compra es Obligatorio"
+					  },
+					  regexp:{
+						  regexp:/^[0-9]*\.?[0-9]{1,2}$/,
+					      message:'Ingrese un dato valido'
+					  }
+				  }
+			  },
+			  txtPUV:{
+				  validators:{
+					  notEmpty:{
+						  message:"El Precio Unitario de Venta es Obligatoria"
+					  },
+					  regexp:{
+						  regexp:/^[0-9]*\.?[0-9]{1,2}$/,
+					      message:'Ingrese un dato valido'
+					  }
+				  }
+			  },
+			  txtSMin:{
+				  validators:{
+					  notEmpty:{
+						  message:"El Stock Minimo es obligatorio"
+					  },
+					  regexp:{
+						  regexp:/^[0-9],
+						  message:"Ingrese un dato valido"
+					  }
+				  }
+			  },
+			  txtSMax:{
+				  validators:{
+					  notEmpty:{
+						  message:"El Stock Maximo es obligatorio"
+					  },
+					  regexp:{
+						  regexp:/^[0-9],
+						  message:"Ingrese un dato valido"
+					  }
+				  }
+			  },
+			  txtpresentacion:{
+				  validators:{
+					  notEmpty:{
+						  message:"La presentacion es obligatoria"
+					  },
+					  stringLength:{
+						  message:'Minimo 20 a más caracteres',
+						  min:20
+					  },
+					  regexp:{
+						  regexp:/^([-a-zA-Z0-9ÉÍÑÓÚÜáéíóúüñ\s])+$/,
+						  message:'Campo no valido'
+
+					  }
+				  }
+			  },
+			  txtMC:{
+				  validators:{
+					  notEmpty:{
+						  message:"El  M_controlado es obligatorio"
+					  },
+					  StringLength:{
+						  message:"MaXIMO",
+						  max:1
+					  }
+					  regexp:{
+						  regexp:/^[0-9],
+						  message:"Ingrese un dato valido"
+					  }
+					  
+				  }
+			  }
 			  
-		  }
+			  
+		  }//fin de fields
 		});
 		$('#mydatatable').DataTable({
 			language: {
