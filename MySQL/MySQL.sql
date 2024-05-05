@@ -38,11 +38,6 @@ WEB_PROVEEDOR		VARCHAR(40) NULL,
 PRIMARY KEY (COD_PROVEEDOR)
 );
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> db3e979fd142ef1de4704c00f9476f88e14b5e5d
 CREATE TABLE CATEGORIA(
 NUM_CATEGORIA 		INT AUTO_INCREMENT,
 NOMBRE_CATEGORIA	VARCHAR(40) NOT NULL,
@@ -71,10 +66,6 @@ CHECK (PRECIO_UNIT_VENTA > 0),
 CHECK (STOCK_MIN >= 0),
 CHECK (STOCK_MAX >= 0),
 FOREIGN KEY(NUM_CATEGORIA) REFERENCES CATEGORIA(NUM_CATEGORIA),
-<<<<<<< HEAD
-=======
-
->>>>>>> db3e979fd142ef1de4704c00f9476f88e14b5e5d
 PRIMARY KEY (COD_PROD)
 );
 
@@ -303,11 +294,6 @@ COD_PROV			INT
 SELECT * FROM PROVEEDOR
 WHERE COD_PROVEEDOR = COD_PROV;
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> db3e979fd142ef1de4704c00f9476f88e14b5e5d
 /*PROCEDIMIENTOS ALMACENADOS PARA UNIDAD DE MEDIDA-------------------------------------------------------------------------------------*/
 CREATE PROCEDURE SP_REGISTRAR_UM(
 ABTR_UND 		    VARCHAR(20),
@@ -823,11 +809,6 @@ call SP_REGISTRAR_EMPLEADO("63215984", "JHONATAN", "HUAMAN", "963258471", "JHONA
 /*INSERTANDO DATOS PARA PROVEEDOR -------------------------------------------------------------------------------------*/
 call SP_REGISTRAR_PROVEEDOR("12345678942", "JUAN PEREZ", "745896321", "Mz D lt 11 B Libertad", "JUANPEREZ@gmail.com", "https://juanperez.com");
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> db3e979fd142ef1de4704c00f9476f88e14b5e5d
 /*INSERTANDO DATOS PARA CATEGORIA -------------------------------------------------------------------------------------*/
 call SP_REGISTRAR_CATEGORIA("ANTIINFLAMATORIO");
 call SP_REGISTRAR_CATEGORIA("ANTIBIOTICO");
@@ -839,11 +820,7 @@ call SP_REGISTRAR_UM("BLR", "BLISTER");
 call SP_REGISTRAR_UM("CAJ", "CAJA");
 
 /*INSERTANDO DATOS PARA PRODUCTO -------------------------------------------------------------------------------------*/
-<<<<<<< HEAD
 call SP_REGISTRAR_PRODUCTO(1, "ASPIRINA", 4.00, 6.40, 10, 400, "CAJA", 0);
-=======
-call SP_REGISTRAR_PRODUCTO(1, "ASPIRINA", 4.00, 6.40, 10, 400,  "CAJA", 0);
->>>>>>> db3e979fd142ef1de4704c00f9476f88e14b5e5d
 call SP_REGISTRAR_PRODUCTO(2, "AMOVAL", 6.00, 10.40, 10, 400, "CAJA", 0);
 call SP_REGISTRAR_PRODUCTO(3, "GRIPACHECK", 6.00, 10.40, 10, 400, "CAJA", 0);
 
