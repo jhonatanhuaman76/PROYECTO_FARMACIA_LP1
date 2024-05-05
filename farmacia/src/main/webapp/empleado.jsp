@@ -237,7 +237,7 @@ function validarTipo(value) {
     // Elimina espacios en blanco y guiones (si los hay)
     const tipoSinFormato = value.replace(/\s|-/g, '');
 
-    // Comprueba si el DNI es igual a "80706050"
+    // Comprueba si el Usuario es válido
     if ((tipoSinFormato === 'Empleado')||(tipoSinFormato === 'Admin')||(tipoSinFormato === 'SuperAdmin')) {
         return {
             valid: true,
