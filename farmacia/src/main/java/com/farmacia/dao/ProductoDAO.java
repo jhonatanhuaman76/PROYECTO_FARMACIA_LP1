@@ -26,7 +26,7 @@ public class ProductoDAO implements IProductoDAO {
 			cone = MySqlConexion.miConexion();
 			
 			//Preparar el callableStatement
-			cstm = cone.prepareCall("{call SP_REGISTRAR_PRODUCTO(?,?,?,?,?,?,?,?,?)}");
+			cstm = cone.prepareCall("{call SP_REGISTRAR_PRODUCTO(?,?,?,?,?,?,?,?)}");
 			
 			//Enviar los datos a cstm obtenidos por la memoria ram
 			cstm.setInt(1, c.getNum_cate());
@@ -35,9 +35,8 @@ public class ProductoDAO implements IProductoDAO {
 			cstm.setDouble(4, c.getPre_unit_venta());
 			cstm.setInt(5, c.getStock_min());
 			cstm.setInt(6, c.getStock_max());
-			cstm.setInt(7, c.getCod_marca());
-			cstm.setString(8, c.getPres());
-			cstm.setInt(9, c.getM_control());
+			cstm.setString(7, c.getPres());
+			cstm.setInt(8, c.getM_control());
 			
 			//Ejecutamos el callablestatement
 			r=cstm.executeUpdate();
@@ -71,19 +70,18 @@ public class ProductoDAO implements IProductoDAO {
 			cone = MySqlConexion.miConexion();
 			
 			//Preparar el callableStatement
-			cstm = cone.prepareCall("{call SP_MODIFICAR_PRODUCTO(?,?,?,?,?,?,?,?,?,?)}");
+			cstm = cone.prepareCall("{call SP_MODIFICAR_PRODUCTO(?,?,?,?,?,?,?,?,?)}");
 			
 			//Enviar los datos a cstm obtenidos por la memoria ram
 			cstm.setInt(1, c.getCod_pro());
-			cstm.setString(2, null);
+			cstm.setInt(2, c.getNum_cate());
 			cstm.setString(3, c.getNom_pro());
 			cstm.setDouble(4, c.getPre_unit_compra());
 			cstm.setDouble(5, c.getPre_unit_venta());
 			cstm.setInt(6, c.getStock_min());
 			cstm.setInt(7, c.getStock_max());
-			cstm.setInt(8, c.getCod_marca());
-			cstm.setString(9, c.getPres());
-			cstm.setInt(10, c.getM_control());
+			cstm.setString(8, c.getPres());
+			cstm.setInt(9, c.getM_control());
 			
 			//Ejecutamos el callablestatement
 			r=cstm.executeUpdate();
@@ -174,9 +172,8 @@ public class ProductoDAO implements IProductoDAO {
 				c.setPre_unit_venta(rs.getDouble(5));
 				c.setStock_min(rs.getInt(6));
 				c.setStock_max(rs.getInt(7));
-				c.setCod_marca(rs.getInt(8));
-				c.setPres(rs.getString(9));
-				c.setM_control(rs.getInt(10));
+				c.setPres(rs.getString(8));
+				c.setM_control(rs.getInt(9));
 			}
 			
 		} catch (SQLException e) {
@@ -229,9 +226,8 @@ public class ProductoDAO implements IProductoDAO {
 				c.setPre_unit_venta(rs.getDouble(5));
 				c.setStock_min(rs.getInt(6));
 				c.setStock_max(rs.getInt(7));
-				c.setCod_marca(rs.getInt(8));
-				c.setPres(rs.getString(9));
-				c.setM_control(rs.getInt(10));
+				c.setPres(rs.getString(8));
+				c.setM_control(rs.getInt(9));
 				
 				data.add(c);
 			}
