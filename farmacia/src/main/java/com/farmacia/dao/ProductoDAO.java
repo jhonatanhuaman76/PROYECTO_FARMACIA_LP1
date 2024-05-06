@@ -280,8 +280,9 @@ public class ProductoDAO implements IProductoDAO {
 				c.setPre_unit_venta(rs.getDouble(4));
 				c.setStock_min(rs.getInt(5));
 				c.setStock_max(rs.getInt(6));
-				c.setPres(rs.getString(7));
-				c.setTotal_ventas(rs.getInt(8));
+				c.setStock_total(rs.getInt(7));
+				c.setPres(rs.getString(8));
+				c.setTotal_ventas(rs.getInt(9));
 				
 				data.add(c);
 			}
