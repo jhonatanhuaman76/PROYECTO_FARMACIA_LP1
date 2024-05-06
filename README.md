@@ -3,7 +3,7 @@
     Sistema de Ventas Cerámicos del Sol
     <br />
     <br />
-    ![image](https://github.com/jhonatanhuaman76/sistema-ventas-ceramicos/assets/132282558/f9b446ff-00b6-4195-b9ee-f79f8181197a)
+    <img src="https://github.com/jhonatanhuaman76/sistema-ventas-ceramicos/assets/132282558/f9b446ff-00b6-4195-b9ee-f79f8181197a" alt="login-sistema-farma-plus">  
   </h1>
 </div>
 
