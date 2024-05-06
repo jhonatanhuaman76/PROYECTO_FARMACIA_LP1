@@ -5,7 +5,9 @@
  -->
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
-    <a class="navbar-brand" href="${pageContext.servletContext.contextPath}/Inicio.jsp">Farma Plus</a>
+    <a class="navbar-brand" href="${pageContext.servletContext.contextPath}/Inicio.jsp">
+    <img alt="logo" src="img/logo-horizontal.png" style="width: 120px">
+    </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -17,7 +19,7 @@
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
             <li><a class="dropdown-item" href="${pageContext.servletContext.contextPath}/Clientes.jsp">Clientes</a></li>
-            <li><a class="dropdown-item" href="${pageContext.servletContext.contextPath}/Producto.jsp">Medicamentos</a></li>
+            <li><a class="dropdown-item" href="${pageContext.servletContext.contextPath}/Producto.jsp">Productos</a></li>
             <li><a class="dropdown-item" href="${pageContext.servletContext.contextPath}/Proveedor.jsp">Proveedores</a></li>
             <li><a class="dropdown-item" href="${pageContext.servletContext.contextPath}/empleado.jsp">Trabajadores</a></li>
           </ul>

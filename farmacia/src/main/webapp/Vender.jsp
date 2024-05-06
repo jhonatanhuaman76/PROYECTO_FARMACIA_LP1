@@ -34,6 +34,7 @@
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.1/js/bootstrapValidator.min.js"></script>
 
 <title>Punto de venta | FarmaPlus</title>
+<link rel="icon" type="image/x-icon" href="img/logo-icon.ico">
 <style type="text/css">
   .outer {
     overflow-y: auto;
@@ -177,7 +178,7 @@
 			}
 		}
 		
-		function solicitarUmProducto(codPro){
+		function solicitarUmProducto(codPro, callback){
 			$.post('${pageContext.servletContext.contextPath}/gestionUM',{
 				codProducto: codPro
 				}, function(result){
@@ -195,6 +196,7 @@
 						);
 					});
 					$('#cboUnidadMedida').selectpicker('refresh');
+					callback();
 					
 			}).fail(function(jqXHR, textStatus, errorThrown){
 				console.error('Se produjo un error:', errorThrown);
@@ -205,7 +207,7 @@
 		}
 	
     function validarIngresoProductoEnTabla(nroLote, codUnidad, cantidad, stock, factor){
-    	const isValidNroLote = validarNroLote(nroLote);
+    	const isValidNroLote = validarNroLote(nroLote, codUnidad);
       const isValidCantidad = validarCantidad(cantidad, stock, factor);
       const isValidUnidad = validarUnidad(codUnidad);
     	
@@ -216,7 +218,7 @@
       }
     }
     
-    function validarNroLote(nroLote){
+    function validarNroLote(nroLote, nroUnidad){
     	let isValid = true;
     	const divProducto = $('#cboLote').closest('.form-group');
     	
@@ -225,10 +227,10 @@
     		divProducto.removeClass('has-error').find("small").remove();
     		divProducto.addClass('has-error').append($('<small>').addClass('help-block').text('Seleccione un producto'));
     		isValid = false;
-    	}else if(existeLoteEnTabla(nroLote)){
+    	}else if(existeLoteEnTabla(nroLote, nroUnidad)){
     		divProducto.removeClass('has-success');
     		divProducto.removeClass('has-error').find("small").remove();
-    		divProducto.addClass('has-error').append($('<small>').addClass('help-block').text('El producto seleccionado ya existe en la tabla'));
+    		divProducto.addClass('has-error').append($('<small>').addClass('help-block').text('El producto seleccionado ya existe en la tabla con esa unidad'));
     		isValid = false;
     	}else{
     		divProducto.removeClass('has-error').find("small").remove();
@@ -238,11 +240,27 @@
     	return isValid;
     }
     
+    function validarCantidadExtend(cantidad, stock, factor){
+			const divCantidad = $('#txtCantidad').closest('.form-group');
+     	
+     	if(cantidad <= 0 || !cantidad || !factor || !stock){
+				return;
+     	}else if(cantidad*factor>stock){
+     		divCantidad.removeClass('has-success');
+     		divCantidad.removeClass('has-error').find("small").remove();
+     		divCantidad.addClass('has-error').append($('<small>').addClass('help-block').text('La cantidad es mayor al stock'));
+     	}else{
+     		divCantidad.removeClass('has-error');
+     		divCantidad.removeClass('has-error').find("small").remove();
+     		divCantidad.addClass('has-success');
+     	}
+    }
+    
     function validarCantidad(cantidad, stock, factor){
     	let isValid = true;
      	const divCantidad = $('#txtCantidad').closest('.form-group');
      	
-     	if(isNaN(cantidad) || cantidad <= 0){
+     	if(cantidad <= 0 || !cantidad){
      		divCantidad.removeClass('has-success');
      		divCantidad.removeClass('has-error').find("small").remove();
      		divCantidad.addClass('has-error').append($('<small>').addClass('help-block').text('Ingrese una cantidad valida'));
@@ -264,7 +282,7 @@
     function validarCantidadTabla(cantidad, div, factor, stock){
     	let isValid = true;
     	
-    	if(isNaN(cantidad) || cantidad <= 0){
+    	if(cantidad <= 0 || !cantidad){
     		div.removeClass('has-success');
     		div.removeClass('has-error').find("small").remove();
     		div.addClass('has-error').append($('<small>').addClass('help-block').text('Ingrese una cantidad valida'));
@@ -300,13 +318,14 @@
     	return isValid;
     }
     
-    function existeLoteEnTabla(nroLote){
+    function existeLoteEnTabla(nroLote, nroUnidad){
     	let loteEncontrado = false;
     	$('#mydatatable tbody tr').each(function(){
     		const loteEnTabla = $(this).find('.codigo input').val();
-    		if(loteEnTabla == nroLote){
+    		const unidadEnTabla = $(this).find('.unidad input').val();
+    		if(loteEnTabla == nroLote && nroUnidad == unidadEnTabla){
     			loteEncontrado = true;
-    			return ;
+    			return;
     		}
     	});
     	return loteEncontrado;
@@ -411,7 +430,13 @@
 			enviarDatosProducto(nroLote, precio, stock);
 			
 			//Enviar las unidades de medida disponibles del producto seleccionado
-			solicitarUmProducto(codPro);
+			solicitarUmProducto(codPro, function(){
+				const stock = $('#cboLote option:selected').data('stock');
+			  const valor = $('#txtCantidad').val();
+			  const factorUnidad = $('#cboUnidadMedida option:selected').data('factor');
+				validarCantidadExtend(valor, stock, factorUnidad);
+			});
+			
 			
 			//Validar
 			validarNroLote(nroLote);
@@ -420,8 +445,13 @@
 		$('#cboUnidadMedida').on('change', function(e){
 			const codUnidad = $('#cboUnidadMedida').val();
 			
+	   	const valor = $('#txtCantidad').val();
+	   	const factorUnidad = $('#cboUnidadMedida option:selected').data('factor');
+	   	const stock = $('#cboLote option:selected').data('stock');
+	   	
 			//Validar
 			validarUnidad(codUnidad);
+			validarCantidadExtend(valor, stock, factorUnidad);
 		});
 		
 		$('#btnVender').on('click', function(e) {
@@ -432,7 +462,7 @@
 			        const factor = $(this).find('.factor').val();
 			        const stock = $(this).find('.stock').val();
 			        
-			        if (isNaN(cantidad) || cantidad <= 0 || factor*cantidad>stock) {
+			        if (cantidad <= 0 || !cantidad || factor*cantidad>stock) {
 			            cantidadesValidas = false;
 			            return false;
 			        }
@@ -517,9 +547,7 @@
     
     //Campo cantidad solo se escribe valores enteros positivos
     $('#txtCantidad').on('input', function(){
-    	let valor =$(this).val();
-    	
-    	$(this).val(valor.replace(/\D/g, ''));
+    	const valor = $(this).val();
     	const factorUnidad = $('#cboUnidadMedida option:selected').data('factor');
     	const stock = $('#cboLote option:selected').data('stock');
     	
