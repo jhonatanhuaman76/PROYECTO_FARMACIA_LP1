@@ -50,6 +50,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
 <title>Reporte de Ventas por Vendedor | Farma Plus</title>
+<link rel="icon" type="image/x-icon" href="img/logo-icon.ico">
 <style type="text/css">
 	.bootstrap-select .dropdown-toggle:focus, .bootstrap-select>select.mobile-device:focus+.dropdown-toggle{
 	    outline: none!important;

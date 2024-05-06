@@ -48,7 +48,8 @@
 <!-- Librería moment -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
-<title>Repote General de Productos | Farma Plus</title>
+<title>Repote de Precios | Farma Plus</title>
+<link rel="icon" type="image/x-icon" href="img/logo-icon.ico">
 </head>
 <body>
 	<c:set var="lista_pre" value="<%= new ProductoDAO().estadisticasPrecio() %>" />

@@ -48,7 +48,8 @@
 <!-- Librería moment -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
-<title>Cliente</title>
+<title>Gestion de clientes | Farma Plus</title>
+<link rel="icon" type="image/x-icon" href="img/logo-icon.ico">
 
 <style type="text/css">
 	.icon-ns{
@@ -192,22 +193,37 @@
 			  dni:{
 				  validators:{
 	  			  notEmpty:{
-	  				  message: 'Producto es obligatorio'
-	  			  }
+	  				  message: 'El DNI es obligatorio'
+	  			  },
+	  				stringLength:{
+	  					message:'DNI debe tener 8 digitos', 
+	  					min: 8, 
+	  					max: 8 
+	  				}
 				  }
 			  },
 			  nombre:{
 				  validators:{
 	  			  notEmpty:{
-	  				  message: 'Producto es obligatorio'
-	  			  }
+	  				  message: 'EL nombre es obligatorio'
+	  			  },
+	  				stringLength:{
+	  					message:'Nombre debe tener entre 3 a 30 caracteres',
+	  					min: 3, 
+	  					max:30 
+	  				}
 				  }
 			  },
 			  apellido:{
 				  validators:{
 	  			  notEmpty:{
-	  				  message: 'Producto es obligatorio'
-	  			  }
+	  				  message: 'El apellido es obligatorio'
+	  			  },
+	  				stringLength:{
+	  					message:'Nombre debe tener entre 3 a 30 caracteres',
+	  					min:3, 
+	  					max:30
+	  				}
 				  }
 			  }
 	    }
@@ -258,6 +274,7 @@
 		});
 	});
 </script>
+
 <c:if test="${not empty sessionScope.title}">
   <script type="text/javascript">
       $(document).ready(function(){   

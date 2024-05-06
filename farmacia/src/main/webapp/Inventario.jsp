@@ -51,6 +51,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
 <title>Inventario | Farma Plus</title>
+<link rel="icon" type="image/x-icon" href="img/logo-icon.ico">
 
 <style type="text/css">
   .icon-ns{
@@ -137,9 +138,16 @@
         			<label>Producto</label>
         			<select class="selectpicker w-100" name="producto" data-placeholder="Elije un producto" data-live-search="true" id="txtProducto">
 							  <c:forEach var="pro" items="${pageScope.lista_pro}">
-							  	<option value="${pro.getCod_pro()}">${pro.getNom_pro()}</option>
+							  	<option 
+							  	value="${pro.getCod_pro()}"
+							  	data-stockmax="${pro.getStock_max()}"
+							  	>${pro.getNom_pro()}</option>
 							  </c:forEach>
 							</select>
+        		</div>
+        		<div class="col form-group">
+        			<label>Stock Maximo</label>
+        			<input type="text" name="stockmax" id="txtStockMax" class="form-control" readonly="true">
         		</div>
         	</div>
        		<div class="row gap-md-0 gap-4">
@@ -250,6 +258,53 @@ $(document).ready(function(){
 	        return true;
 	    }
 	};
+	
+	$.fn.bootstrapValidator.validators.stockMax = {
+			validate: function(validator, $field, options){
+				const stockMax = $('#txtStockMax').val();
+				const stock = $field.val();
+				
+				if(!stock){
+					return;
+				}
+				
+				if(!stockMax){
+					 validator.updateStatus($field, 'VALIDATING', 'stockMax');
+					 return;
+				}
+				
+				if(stock > parseInt(stockMax)){
+					return false;
+				}
+				
+				return true;
+			}
+	}
+	
+	$.fn.bootstrapValidator.validators.stockMaxSelect = {
+			validate: function(validator, $field, options){
+				const stockMax = $('#txtProducto option:selected').data('stockmax');
+				const stock = $('#txtStock').val();
+				
+				console.log(stockMax, stock);
+				
+				if(!stock || !stockMax){
+					return true;
+				}
+				
+				if(stock > parseInt(stockMax)){
+					validator.updateStatus($('#txtStock'), 'INVALID', 'stockMax');
+					return true;
+				}
+				
+				if(stock < parseInt(stockMax)){
+					validator.updateStatus($('#txtStock'), 'VALID', 'stockMax');
+					return true;
+				}
+				
+				return true;
+			}
+	};
 
 	
 	// Aplicando validaciones
@@ -265,7 +320,10 @@ $(document).ready(function(){
   		  validators:{
   			  notEmpty:{
   				  message: 'Producto es obligatorio'
-  			  }
+  			  },
+  			stockMaxSelect:{
+  				
+  			}
   		  }
   	  },
   	  stock:{
@@ -281,6 +339,9 @@ $(document).ready(function(){
 	  			  inclusive:true,
 	  			  message:'El stock debe ser mayor o igual a 1'
 	  		  },
+	  			stockMax:{
+	  			  message: 'La cantidad es mayor al stock maximo'
+	  		  }
   		  }
   	  },
 	  	fecha_venc:{
@@ -345,6 +406,11 @@ $(document).ready(function(){
 	});
 	
 	$('.f-btnGuardar').on('click', function(e){
+	})
+	
+	$('#txtProducto').on('change', function(){
+		const stockMax = $('#txtProducto option:selected').data('stockmax');
+		$('#txtStockMax').val(stockMax);
 	})
 });
 </script>

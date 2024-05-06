@@ -11,6 +11,7 @@
 <!-- Estilos del reporteFacturas -->
 <link rel="stylesheet" href="css/reporteFacturas.css">
 
+<link rel="icon" type="image/x-icon" href="img/logo-icon.ico">
 </head>
 <body>
 
