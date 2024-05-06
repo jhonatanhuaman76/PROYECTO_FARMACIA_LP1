@@ -72,7 +72,7 @@
 			<h1>Punto de Venta FarmaPlus</h1>
 	    <div class="mt-4 row">
 	    	<div class="col-md-10 form-group ns">
-	    		<label for="txtCliente" class="form-label">Cliente</label><button type="button" class="btn text-primary fw-bold border-0" data-bs-toggle="button">[+ Nuevo]</button>
+	    		<label for="txtCliente" class="form-label">Cliente</label><button type="button" class="btn text-primary fw-bold border-0" data-bs-toggle="modal" data-bs-target="#modalRegistro">[+ Nuevo]</button>
 		      <select class="selectpicker w-100" name="cliente" data-placeholder="Elije un cliente" data-live-search="true" id="txtCliente">
 					  <c:forEach var="cli" items="${pageScope.lista_cli}">
 					  	<option value="${cli.getCod_cli()}">${cli.getNom_cli()} ${ cli.getApe_cli()} -- DNI: ${cli.getDni_cli()}</option>
@@ -136,7 +136,8 @@
 							<th>Nro Lote</th>
 							<th>Nombre</th>
 							<th>Unidades</th>
-							<th>Cantidad</th>
+							<th>Cantidad <br>(PRES)</th>
+							<th>Cantidad <br>(UND)</th>
 							<th>Precio</th>
 							<th>Importe</th>
 							<th>Acciones</th>	    		
@@ -168,8 +169,69 @@
 		</form>
 	</div>
 	
+	<!-- Modal -->
+<div class="modal fade" id="modalRegistro" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="titleModalRegistro">Registrar Cliente</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form role="form" method="post" class="d-flex flex-column gap-4" id="frmCliente">
+      		<input type="hidden" class="form-control" id="codigo" name="codigo">
+        	<div class="row">
+	        	<div class="form-group">
+	      			<label>DNI</label>
+	      			<input type="text" class="form-control" id="dni" name="dni" placeholder="Ingrese el DNI">
+	     			</div>
+        	</div>
+        	<div class="row">
+	        	<div class="form-group">
+	      			<label>Nombre</label>
+	      			<input type="text" class="form-control" id="nombre" name="nombre" placeholder="Ingrese el nombre">
+	     			</div>
+        	</div>
+        	<div class="row">
+	     			<div class="form-group">
+	      			<label>Apellido</label>
+	      			<input type="text" class="form-control" id="apellido" name="apellido" placeholder="Ingrese el apellido">
+	     			</div>
+        	</div>
+        	<div class="row">
+	        	<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+	             <button type="submit" class="btn btn-success" name="accion" value="AgregarAjax" id="btnGuardar">Guardar</button>
+	             <button type="button" class="btn btn-info" data-bs-dismiss="modal">Cancelar</button>
+	         	</div>
+        	</div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+	
 	<script type="text/javascript">
 	$(document).ready(function(){
+		
+		function registrarCliente(){
+			const formData = $("#frmCliente").serialize();
+			$.post('${pageContext.servletContext.contextPath}/gestionClienteAjax', 
+				formData, function(result){
+				$("#txtCliente").empty();
+				const cli = $.parseJSON(result);
+				
+				cli.forEach(function (e) {
+					$('#txtCliente').append(
+							$('<option>')
+							.attr('value', e.cod_cli)
+							.text(e.nom_cli+" "+e.ape_cli+" -- DNI: "+e.dni_cli)
+					);
+				});
+				$('#txtCliente').selectpicker('refresh');
+			}).fail(function(jqXHR, textStatus, errorThrown){
+				
+			});
+		}
 		
 		function enviarDatosProducto(nroLote, precio, stock){
 			if(nroLote !== ''){
@@ -211,7 +273,7 @@
 	
     function validarIngresoProductoEnTabla(nroLote, codUnidad, cantidad, stock, factor){
     	const isValidNroLote = validarNroLote(nroLote, codUnidad);
-      const isValidCantidad = validarCantidad(cantidad, stock, factor);
+      const isValidCantidad = validarCantidad(cantidad, stock, factor, nroLote);
       const isValidUnidad = validarUnidad(codUnidad);
     	
       if(isValidNroLote && isValidCantidad && isValidUnidad){
@@ -224,6 +286,7 @@
     function validarNroLote(nroLote, nroUnidad){
     	let isValid = true;
     	const divProducto = $('#cboLote').closest('.form-group');
+    	console.log(nroLote);
     	
     	if(nroLote === ''){
     		divProducto.removeClass('has-success');
@@ -243,12 +306,12 @@
     	return isValid;
     }
     
-    function validarCantidadExtend(cantidad, stock, factor){
+    function validarCantidadExtend(cantidad, stock, factor, nroLote){
 			const divCantidad = $('#txtCantidad').closest('.form-group');
      	
      	if(cantidad <= 0 || !cantidad || !factor || !stock){
 				return;
-     	}else if(cantidad*factor>stock){
+     	}else if((cantidad*factor)+cantidadTotalLote(nroLote)>stock){
      		divCantidad.removeClass('has-success');
      		divCantidad.removeClass('has-error').find("small").remove();
      		divCantidad.addClass('has-error').append($('<small>').addClass('help-block').text('La cantidad es mayor al stock'));
@@ -259,7 +322,7 @@
      	}
     }
     
-    function validarCantidad(cantidad, stock, factor){
+    function validarCantidad(cantidad, stock, factor, nroLote){
     	let isValid = true;
      	const divCantidad = $('#txtCantidad').closest('.form-group');
      	
@@ -268,7 +331,7 @@
      		divCantidad.removeClass('has-error').find("small").remove();
      		divCantidad.addClass('has-error').append($('<small>').addClass('help-block').text('Ingrese una cantidad valida'));
      		isValid = false;
-     	}else if(cantidad*factor>stock){
+     	}else if((cantidad*factor)+cantidadTotalLote(nroLote)>stock){
      		divCantidad.removeClass('has-success');
      		divCantidad.removeClass('has-error').find("small").remove();
      		divCantidad.addClass('has-error').append($('<small>').addClass('help-block').text('La cantidad es mayor al stock'));
@@ -282,15 +345,14 @@
     	return isValid;
     }
     
-    function validarCantidadTabla(cantidad, div, factor, stock){
+    function validarCantidadTabla(cantidad, div, factor, stock, nroLote){
     	let isValid = true;
-    	
     	if(cantidad <= 0 || !cantidad){
     		div.removeClass('has-success');
     		div.removeClass('has-error').find("small").remove();
     		div.addClass('has-error').append($('<small>').addClass('help-block').text('Ingrese una cantidad valida'));
     		isValid = false;
-    	}else if(cantidad*factor>stock){
+    	}else if(cantidadTotalLote(nroLote)>stock){
      		div.removeClass('has-success');
      		div.removeClass('has-error').find("small").remove();
      		div.addClass('has-error').append($('<small>').addClass('help-block').text('La cantidad es mayor al stock'));
@@ -300,6 +362,8 @@
     		div.removeClass('has-error').find("small").remove();
     		div.addClass('has-success');
     	}
+    	
+    	console.log(cantidadTotalLote(nroLote));
     	
     	return isValid;
     }
@@ -369,10 +433,13 @@
 			unidadTd.append($('<input>').addClass('form-control border-0').attr('type', 'hidden').attr('name', 'unidad[]').val(codUnidad).prop('readonly', true));
 			nuevaFila.append(unidadTd);
 			
+			var cantidadPresTd = $('<td>').addClass('cantidad cantidadPres form-group').css('width', '150px');
+			cantidadPresTd.append($('<input>').addClass('form-control border-0 cantidadPres').attr('type', 'number').attr('name', 'cantidadPres[]').val(cantidad).prop('readonly', true));
+			nuevaFila.append(cantidadPresTd);
+			
 			// Añadir la celda de cantidad a la fila
 			var cantidadTd = $('<td>').addClass('cantidad form-group').css('width', '150px');
-			cantidadTd.append($('<input>').addClass('form-control border-0 cantidadPres').attr('type', 'number').attr('name', 'cantidadPres[]').val(cantidad).prop('readonly', true));
-			cantidadTd.append($('<input>').addClass('form-control border-0 cantidadBase').attr('type', 'hidden').attr('name', 'cantidadBase[]').val(cantidad*factorUnidad).prop('readonly', true));
+			cantidadTd.append($('<input>').addClass('form-control border-0 cantidadBase').attr('name', 'cantidadBase[]').val(cantidad*factorUnidad).prop('readonly', true));
 			cantidadTd.append($('<input>').addClass('form-control border-0 factor').attr('type', 'hidden').attr('name', 'factor').val(factorUnidad).prop('readonly', true));
 			cantidadTd.append($('<input>').addClass('form-control border-0 stock').attr('type', 'hidden').attr('name', 'stock').val(stock).prop('readonly', true));
 			nuevaFila.append(cantidadTd);
@@ -392,6 +459,22 @@
 			nuevaFila.append(accionesTd);
 			
 			$('#mydatatable tbody').append(nuevaFila);
+    }
+
+    function limpiarCajasAgregarProducto(){
+    	$("#txtCantidad").val("");
+    }
+
+    function cantidadTotalLote(nroLote){
+    	let cant = 0;
+    	$('#mydatatable tbody tr').each(function(){
+    		const loteEnTabla = $(this).find('.codigo input').val();
+    		const cantidad = parseInt($(this).find('.cantidad .cantidadBase').val());
+    		if(loteEnTabla == nroLote){
+    			cant+=cantidad;
+    		}
+    	});
+    	return cant;
     }
 		
 		//Añadir validaciones al formulario de ventas
@@ -437,7 +520,7 @@
 				const stock = $('#cboLote option:selected').data('stock');
 			  const valor = $('#txtCantidad').val();
 			  const factorUnidad = $('#cboUnidadMedida option:selected').data('factor');
-				validarCantidadExtend(valor, stock, factorUnidad);
+				validarCantidadExtend(valor, stock, factorUnidad, nroLote);
 			});
 			
 			
@@ -447,6 +530,7 @@
 		
 		$('#cboUnidadMedida').on('change', function(e){
 			const codUnidad = $('#cboUnidadMedida').val();
+			const nroLote = $('#cboLote').val();
 			
 	   	const valor = $('#txtCantidad').val();
 	   	const factorUnidad = $('#cboUnidadMedida option:selected').data('factor');
@@ -454,7 +538,7 @@
 	   	
 			//Validar
 			validarUnidad(codUnidad);
-			validarCantidadExtend(valor, stock, factorUnidad);
+			validarCantidadExtend(valor, stock, factorUnidad, nroLote);
 		});
 		
 		$('#btnVender').on('click', function(e) {
@@ -495,6 +579,7 @@
 		
 		// Modificar cantidad al hacer clic en el botón editar
     $('#mydatatable').on('click', '.btnEditar', function() {
+    		const nroLote = $(this).closest('tr').find('.codigo input').val();
         const cantidadPresInput = $(this).closest('tr').find('.cantidad input.cantidadPres');
         const cantidadBaseInput = $(this).closest('tr').find('.cantidad input.cantidadBase');
         const factor = $(this).closest('tr').find('.cantidad input.factor').val();
@@ -513,7 +598,7 @@
 		        cantidadBaseInput.val(cantidadPresInput.val()*factor);
 		        actualizarTotales();
 		        
-		        const isValid = validarCantidadTabla(cantidad, $(this).closest('tr').find('.cantidad'), factor, stock);
+		        const isValid = validarCantidadTabla(cantidad, $(this).closest('tr').find('.cantidadPres'), factor, stock, nroLote);
 		        
 		        if(!isValid){
 		        	 $(this).focus();
@@ -531,7 +616,7 @@
       	// Volver a desactivar campo cantidad al perder foco
         cantidadPresInput.blur(function(){
         	let cantidad = $(this).val();
-        	const isValid = validarCantidadTabla(cantidad, $(this).closest('tr').find('.cantidad'),factor, stock);
+        	const isValid = validarCantidadTabla(cantidad, $(this).closest('tr').find('.cantidadPres'),factor, stock, nroLote);
         	if(!isValid){
 	        	 $(this).focus();
 	        	 return;
@@ -551,10 +636,11 @@
     //Campo cantidad solo se escribe valores enteros positivos
     $('#txtCantidad').on('input', function(){
     	const valor = $(this).val();
+    	const nroLote = $('#cboLote').val();
     	const factorUnidad = $('#cboUnidadMedida option:selected').data('factor');
     	const stock = $('#cboLote option:selected').data('stock');
     	
-    	validarCantidad(valor, stock, factorUnidad);
+    	validarCantidad(valor, stock, factorUnidad, nroLote);
     });
     
     // Agregar producto al detalle de venta
@@ -572,8 +658,16 @@
     	if(validarIngresoProductoEnTabla(nroLote, codUnidad, cantidad, stock, factorUnidad)){
     		anadirNuevoDetalle(nroLote, nombreProducto, abtrUnidad, codUnidad, cantidad, factorUnidad, precio, stock);
     		actualizarTotales();
+    		limpiarCajasAgregarProducto()
     	}
 
+    });
+    
+    $('#frmCliente').on('submit', function(e){
+    	e.preventDefault();
+    	registrarCliente();
+    	$('#modalRegistro').modal('hide');
+    	$('#frmCliente input').val('');
     });
 
 	});

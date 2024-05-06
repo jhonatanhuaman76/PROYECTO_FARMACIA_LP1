@@ -74,6 +74,7 @@
 						<th>Precio venta</th>
 						<th>Stock min</th>
 						<th>Stock max</th>
+						<th>Stock total</th>
 						<th>Presentacion</th>
 						<th>Nro ventas</th>
 		  		</tr>
@@ -87,6 +88,7 @@
 						<td>${pro.getPre_unit_venta()}</td>
 						<td>${pro.getStock_min()}</td>
 						<td>${pro.getStock_max()}</td>
+						<td>${pro.getStock_total()}</td>
 						<td>${pro.getPres()}</td>
 						<td>${pro.getTotal_ventas()}</td>
 					</tr>

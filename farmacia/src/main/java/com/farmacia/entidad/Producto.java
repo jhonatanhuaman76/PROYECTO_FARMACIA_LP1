@@ -1,7 +1,7 @@
 package com.farmacia.entidad;
 
 public class Producto {
-private int cod_pro, num_cate, stock_min, stock_max, cod_marca, m_control, total_ventas;
+private int cod_pro, num_cate, stock_min, stock_max, stock_total, cod_marca, m_control, total_ventas;
 private String nom_pro, pres, nom_cate, nom_mayor, nom_menor;
 private double pre_unit_compra, pre_unit_venta, pvmayor, pvmenor, pvprom;
 
@@ -156,6 +156,14 @@ public String getNom_cate() {
 
 public void setNom_cate(String nom_cate) {
 	this.nom_cate = nom_cate;
+}
+
+public int getStock_total() {
+	return stock_total;
+}
+
+public void setStock_total(int stock_total) {
+	this.stock_total = stock_total;
 }
 
 }
