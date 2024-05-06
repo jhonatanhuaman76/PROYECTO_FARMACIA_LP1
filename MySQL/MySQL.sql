@@ -266,9 +266,14 @@ CREATE PROCEDURE SP_RECUPERAR_CLAVE
 ( in nom varchar(40),
   in  ape varchar(40),
   in  correo varchar(40),
-  in user varchar(20)
+  in user_e varchar(20)
 )
-SELECT * FROM EMPLEADO WHERE NOMBRE_EMPLEADO=nom AND APELLIDO_EMPLEADO=ape AND CORREO_EMPLEADO=correo AND NOMBRE_USUARIO=user;  
+SELECT * FROM 
+EMPLEADO 
+WHERE NOMBRE_EMPLEADO=nom 
+AND APELLIDO_EMPLEADO=ape 
+AND CORREO_EMPLEADO=correo 
+AND NOMBRE_USUARIO=user_e;  
 
 
 /*PROCEDIMIENTOS ALMACENADOS PARA PROVEEDOR---------------------------------------------------------------------------------*/
