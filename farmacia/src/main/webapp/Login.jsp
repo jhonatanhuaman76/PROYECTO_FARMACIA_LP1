@@ -1,3 +1,4 @@
+
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -243,49 +244,8 @@
 		});
 	});
 	
-	
-
-	//función sweetAlert
-	document.getElementById('frmEmpleado').addEventListener('submit', function(event) {
-    	event.preventDefault(); // Evitar que el formulario se envíe automáticamente
-
-    // Realizar cualquier validación del formulario aquí si es necesario
-		let titleClav = "<%=request.getSession().getAttribute("title1")%>";
-	    let textClav = "<%=request.getSession().getAttribute("text1")%>";
-	    let iconText = "<%=request.getSession().getAttribute("icon1")%>";
-
-	        if (titleClav && textClav && iconText) {
-	            Swal.fire({
-	                title: titleClav,
-	                text: textClav,
-	                icon: iconText
-             })/*.then(() => {
-	                window.location.reload();
-	            });*/
-	        } else {
-	            // Manejar el caso en el que no hay valores para titleClav, textClav o iconText
-         }
-});
-	
-	<%--function enviarDatos(){
-	       let titleClav = "<%=request.getSession().getAttribute("title1")%>";
-	        let textClav = "<%=request.getSession().getAttribute("text1")%>";
-	        let iconText = "<%=request.getSession().getAttribute("icon1")%>";
-
-	        if (titleClav && textClav && iconText) {
-	            Swal.fire({
-	                title: titleClav,
-	                text: textClav,
-	                icon: iconText
-             }).then(() => {
-	                window.location.reload(); // Recargar la página
-	            });
-	        } else {
-	            // Manejar el caso en el que no hay valores para titleClav, textClav o iconText
-         }
-	}--%>
-	
 </script>
+
 <c:if test="${not empty sessionScope.title}">
   <script type="text/javascript">
   	$(document).ready(function(){   
