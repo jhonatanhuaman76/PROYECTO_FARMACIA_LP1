@@ -76,6 +76,12 @@ public class ServletVentas extends HttpServlet {
 				db.setPre_unit_venta(precios[i]);
 				
 				deboleDAO.registrarDetalleBoleta(db);
+				
+				System.out.println("--------------------------------------");
+				System.out.println(codigoBoleta);
+				System.out.println(nroLotes[i]);
+				System.out.println(loteDAO.buscarLote(nroLotes[i]).getCod_pro());
+				System.out.println(unidades[i]);
 			}
 			
 			title = "¡Venta exitosa!";

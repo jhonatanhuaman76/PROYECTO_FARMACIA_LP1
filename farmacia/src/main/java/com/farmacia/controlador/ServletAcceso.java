@@ -87,8 +87,8 @@ public class ServletAcceso extends HttpServlet {
 			}
 		}
 		else {
+			request.getSession().removeAttribute("empleado");
 			request.getRequestDispatcher("Login.jsp").forward(request, response);
-			
 		}
 		
 	}

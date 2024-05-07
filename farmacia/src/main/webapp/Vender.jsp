@@ -162,8 +162,6 @@
 			  </div>
 	    </div>
 	    <div class="my-4 d-md-flex justify-content-md-end gap-2">
-			  <button type="button" class="btn btn-outline-secondary">Limpiar</button>
-			  <button type="button" class="btn btn-outline-dark">Imprimir</button>
 			  <button type="submit" class="btn btn-success" id="btnVender">Vender</button>
 	    </div>
 		</form>
@@ -212,6 +210,61 @@
 	
 	<script type="text/javascript">
 	$(document).ready(function(){
+		
+		// Aplicando validaciones
+		$('#frmCliente').bootstrapValidator({
+			message: 'This value is not valid',
+			feedbackIcons: {
+		        valid: 'glyphicon glyphicon-ok',
+		        invalid: 'glyphicon glyphicon-remove',
+		        validating: 'glyphicon glyphicon-refresh'
+		  },
+		  excluded:[':disabled'],
+		  fields:{
+			  dni:{
+				  validators:{
+	  			  notEmpty:{
+	  				  message: 'El DNI es obligatorio'
+	  			  },
+	  				stringLength:{
+	  					message:'DNI debe tener 8 digitos', 
+	  					min: 8, 
+	  					max: 8 
+	  				}
+				  }
+			  },
+			  nombre:{
+				  validators:{
+	  			  notEmpty:{
+	  				  message: 'EL nombre es obligatorio'
+	  			  },
+	  				stringLength:{
+	  					message:'Nombre debe tener entre 3 a 30 caracteres',
+	  					min: 3, 
+	  					max:30 
+	  				}
+				  }
+			  },
+			  apellido:{
+				  validators:{
+	  			  notEmpty:{
+	  				  message: 'El apellido es obligatorio'
+	  			  },
+	  				stringLength:{
+	  					message:'Nombre debe tener entre 3 a 30 caracteres',
+	  					min:3, 
+	  					max:30
+	  				}
+				  }
+			  }
+	    }
+		}).on('success.form.bv', function(e){
+			e.preventDefault();
+			registrarCliente();
+	  	$('#modalRegistro').modal('hide');
+  	  $('#frmCliente input').val('');
+  		$("#frmCliente").data('bootstrapValidator').resetForm();
+		});
 		
 		function registrarCliente(){
 			const formData = $("#frmCliente").serialize();
@@ -286,7 +339,6 @@
     function validarNroLote(nroLote, nroUnidad){
     	let isValid = true;
     	const divProducto = $('#cboLote').closest('.form-group');
-    	console.log(nroLote);
     	
     	if(nroLote === ''){
     		divProducto.removeClass('has-success');
@@ -363,8 +415,6 @@
     		div.addClass('has-success');
     	}
     	
-    	console.log(cantidadTotalLote(nroLote));
-    	
     	return isValid;
     }
     
@@ -419,6 +469,8 @@
     function anadirNuevoDetalle(nroLote, nombreProducto, abtrUnidad, codUnidad, cantidad, factorUnidad, precio, stock){
     	// Crear un nueva fila
 			var nuevaFila = $('<tr>');
+    	
+    	console.log(nroLote);
 			
 			// Añadir la celda del nroLote a la fila
 			var nroloteTd = $('<td>').addClass('codigo').css('width', '150px');
@@ -501,6 +553,44 @@
     		  }
     	  }
       }
+		}).on('success.form.bv', function(e){
+				// Validar que todos los input con clase cantidadPres de la tabla sea un numero valido
+				let cantidadesValidas = true;
+		    $('#mydatatable tbody tr').each(function() {
+		        const cantidad = $(this).find('.cantidadPres').val();
+		        const factor = $(this).find('.factor').val();
+		        const stock = $(this).find('.stock').val();
+		        
+		        if (cantidad <= 0 || !cantidad || factor*cantidad>stock) {
+		            cantidadesValidas = false;
+		            return;
+		        }
+		    });
+		    
+		    if (!cantidadesValidas) {
+		        e.preventDefault();
+		        Swal.fire({
+		            icon: 'error',
+		            title: 'Oops...',
+		            text: 'Una o más cantidades en la tabla no son válidas. Por favor, ingrese cantidades válidas.',
+		            showConfirmButton: true,
+		            timer: 2000
+		        });
+		        $("#frmVentas").data('bootstrapValidator').resetForm(); 	
+		    }
+		
+			   if ($('#mydatatable tbody tr').length === 0) {
+			       e.preventDefault();
+			       Swal.fire({
+			           icon: 'error',
+			           title: 'Oops...',
+			           text: 'No hay datos en la tabla, agregue productos antes de vender.',
+			           showConfirmButton: true,
+			           timer: 2000
+			       });
+			       $("#frmVentas").data('bootstrapValidator').resetForm();
+			   }
+		   
 		});
 		
 		// Activar Bootstrap Select
@@ -540,42 +630,6 @@
 			validarUnidad(codUnidad);
 			validarCantidadExtend(valor, stock, factorUnidad, nroLote);
 		});
-		
-		$('#btnVender').on('click', function(e) {
-					// Validar que todos los input con clase cantidadPres de la tabla sea un numero valido
-					let cantidadesValidas = true;
-			    $('#mydatatable tbody tr').each(function() {
-			        const cantidad = $(this).find('.cantidadPres').val();
-			        const factor = $(this).find('.factor').val();
-			        const stock = $(this).find('.stock').val();
-			        
-			        if (cantidad <= 0 || !cantidad || factor*cantidad>stock) {
-			            cantidadesValidas = false;
-			            return false;
-			        }
-			    });			
-			    if (!cantidadesValidas) {
-			        e.preventDefault();
-			        Swal.fire({
-			            icon: 'error',
-			            title: 'Oops...',
-			            text: 'Una o más cantidades en la tabla no son válidas. Por favor, ingrese cantidades válidas.',
-			            showConfirmButton: true,
-			            timer: 2000
-			        });
-			    }
-			
-	        if ($('#mydatatable tbody tr').length === 0) {
-	            e.preventDefault();
-	            Swal.fire({
-	                icon: 'error',
-	                title: 'Oops...',
-	                text: 'No hay datos en la tabla, agregue productos antes de vender.',
-	                showConfirmButton: true,
-	                timer: 2000
-	            });
-	        }
-	   });
 		
 		// Modificar cantidad al hacer clic en el botón editar
     $('#mydatatable').on('click', '.btnEditar', function() {
@@ -622,6 +676,7 @@
 	        	 return;
 	        }
           $(this).prop('readonly', true);
+          return;
         });
       	
     });
@@ -661,13 +716,6 @@
     		limpiarCajasAgregarProducto()
     	}
 
-    });
-    
-    $('#frmCliente').on('submit', function(e){
-    	e.preventDefault();
-    	registrarCliente();
-    	$('#modalRegistro').modal('hide');
-    	$('#frmCliente input').val('');
     });
 
 	});

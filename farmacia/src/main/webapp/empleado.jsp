@@ -392,7 +392,7 @@ function validarTipo(value) {
 	                  message: ' '
 	              },
 				  stringLength:{
-					  message:' ',
+					  message:'La clave debe tener de 5 a 20 caracteres',
 					  min:5,
 					  max:20
 				  }
