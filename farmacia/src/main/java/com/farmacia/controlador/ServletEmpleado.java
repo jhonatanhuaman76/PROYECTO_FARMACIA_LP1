@@ -108,7 +108,7 @@ public class ServletEmpleado extends HttpServlet {
 		request.getSession().setAttribute("text", text);
 		request.getSession().setAttribute("icon", icon);
 		
-		response.sendRedirect("Empleado.jsp");
+		response.sendRedirect("empleado.jsp");
 	}
 
 }

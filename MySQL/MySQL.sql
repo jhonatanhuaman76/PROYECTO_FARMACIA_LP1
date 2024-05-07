@@ -845,7 +845,7 @@ call SP_REGISTRAR_CLIENTE("00000000", "PUBLICO", "GENERAL");
 call SP_REGISTRAR_CLIENTE("95136248", "ADRIEL", "PINTADO");
 
 /*INSERTANDO DATOS PARA EMPLEADO -------------------------------------------------------------------------------------*/
-call SP_REGISTRAR_EMPLEADO("", "SUPERADMIN", "SUPERADMIN", "", "", "", "SUPERADMIN", "admin123", "123");
+call SP_REGISTRAR_EMPLEADO("00000000", "SUPERADMIN", "SUPERADMIN", "000000000", "superadmin@gmail.com", "adminadminadmin", "SuperAdmin", "admin123", "123");
 call SP_REGISTRAR_EMPLEADO("63215984", "JHONATAN", "HUAMAN", "963258471", "JHONATAN@gmail.com", "Mateo Silva MzB ltD, San Luis", "EMPLEADO", "jhonatan123", "123");
 
 /*INSERTANDO DATOS PARA PROVEEDOR -------------------------------------------------------------------------------------*/
