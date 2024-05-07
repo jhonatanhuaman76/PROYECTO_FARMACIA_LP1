@@ -59,6 +59,9 @@
 	.icon-ns{
   	width: 25px;
   }
+  .bootstrap-select .dropdown-toggle:focus, .bootstrap-select>select.mobile-device:focus+.dropdown-toggle{
+	    outline: none!important;
+	}
 </style>
 
 </head>
@@ -142,9 +145,9 @@
       <div class="modal-body">
         <form action="${pageContext.servletContext.contextPath}/gestionProducto" role="form" method="post" class="d-flex flex-column gap-4" id="frmProducto">
       		<input type="hidden" class="form-control" id="codigo" name="codigo">
-        	<div class="form-group">
+        	<div class="form-group ns">
 				<label for="exampleInputPassword1" class="form-label">Categoria</label>
-					<select class="form-select"  name="txtcategoria" id="categoria">
+					<select class="selectpicker w-100"  name="txtcategoria" id="categoria">
 						<option value="">[Seleccione categoria]</option>
 						<c:forEach items="${lista_categoria}" var="datos">
 								<option value="${datos.getNum_cate()}">${datos.getNom_cate()}</option>
@@ -188,9 +191,12 @@
 	     			</div>
         	</div>
         	<div class="row">
-	     			<div class="form-group">
-	      			<label>M_Controlado</label>
-	      			<input type="text" class="form-control" id="M_controlado" name="txtMC" placeholder="Ingrese M_controlado">
+	     			<div class="form-group ns">
+	      			<label>¿Requiere receta médica?</label>
+	      			<select class="selectpicker w-100" id="M_controlado" name="txtMC">
+	      				<option value="0">NO</option>
+	      				<option value="1">SI</option>
+	      			</select>
 	     			</div>
         	</div>
         	<div class="row">
@@ -240,7 +246,7 @@
 		        validating: 'glyphicon glyphicon-refresh'
 		  },
 		  fields:{
-			  categoria:{
+			  txtcategoria:{
 				  validators:{
 					  notEmpty:{
 						  message:"Categoria es obligatorio"
@@ -351,15 +357,15 @@
 		
 		
 		$('.btnEditar').on('click', function(){
-			const cod = $(this).parents("tr").find("td")[0].innerHTML;
-			const cat = $(this).parents("tr").find("td")[1].innerHTML;
-			const pro = $(this).parents("tr").find("td")[2].innerHTML;
-			const puc = $(this).parents("tr").find("td")[3].innerHTML;
-			const puv = $(this).parents("tr").find("td")[4].innerHTML;
-			const stckmin = $(this).parents("tr").find("td")[5].innerHTML;
-			const stckmax = $(this).parents("tr").find("td")[6].innerHTML;
-			const pre = $(this).parents("tr").find("td")[7].innerHTML;
-			const con = $(this).parents("tr").find("td")[8].innerHTML;
+			const cod = $(this).parents("tr").find("td")[0].textContent;
+			const cat = $(this).parents("tr").find("td")[1].textContent;
+			const pro = $(this).parents("tr").find("td")[2].textContent;
+			const puc = $(this).parents("tr").find("td")[3].textContent;
+			const puv = $(this).parents("tr").find("td")[4].textContent;
+			const stckmin = $(this).parents("tr").find("td")[5].textContent;
+			const stckmax = $(this).parents("tr").find("td")[6].textContent;
+			const pre = $(this).parents("tr").find("td")[7].textContent;
+			const con = $(this).parents("tr").find("td")[8].textContent;
 			console.log('HOLA');
 			
 			

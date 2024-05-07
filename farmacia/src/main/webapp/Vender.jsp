@@ -433,7 +433,7 @@
 			unidadTd.append($('<input>').addClass('form-control border-0').attr('type', 'hidden').attr('name', 'unidad[]').val(codUnidad).prop('readonly', true));
 			nuevaFila.append(unidadTd);
 			
-			var cantidadPresTd = $('<td>').addClass('cantidad cantidadPres form-group').css('width', '150px');
+			var cantidadPresTd = $('<td>').addClass('cantidad cantidadPresDiv form-group').css('width', '150px');
 			cantidadPresTd.append($('<input>').addClass('form-control border-0 cantidadPres').attr('type', 'number').attr('name', 'cantidadPres[]').val(cantidad).prop('readonly', true));
 			nuevaFila.append(cantidadPresTd);
 			
@@ -598,7 +598,7 @@
 		        cantidadBaseInput.val(cantidadPresInput.val()*factor);
 		        actualizarTotales();
 		        
-		        const isValid = validarCantidadTabla(cantidad, $(this).closest('tr').find('.cantidadPres'), factor, stock, nroLote);
+		        const isValid = validarCantidadTabla(cantidad, $(this).closest('tr').find('.cantidadPresDiv'), factor, stock, nroLote);
 		        
 		        if(!isValid){
 		        	 $(this).focus();
@@ -616,7 +616,7 @@
       	// Volver a desactivar campo cantidad al perder foco
         cantidadPresInput.blur(function(){
         	let cantidad = $(this).val();
-        	const isValid = validarCantidadTabla(cantidad, $(this).closest('tr').find('.cantidadPres'),factor, stock, nroLote);
+        	const isValid = validarCantidadTabla(cantidad, $(this).closest('tr').find('.cantidadPresDiv'),factor, stock, nroLote);
         	if(!isValid){
 	        	 $(this).focus();
 	        	 return;
